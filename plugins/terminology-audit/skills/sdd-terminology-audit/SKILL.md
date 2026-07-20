@@ -112,6 +112,34 @@ For each distinct concept, work out:
    which term better matches the domain's actual terminology (check for
    existing product/business vocabulary if available) rather than by
    deferring to "the most authoritative doc."
+
+#### Authority required for conflicts
+
+Never choose a preferred term for a `✕` conflict unless the authoritative
+evidence supporting that choice is included in the audit evidence.
+
+Authoritative evidence may include:
+
+- an existing implementation identifier;
+- a database schema or interface contract;
+- a published API or field name;
+- an explicit definition elsewhere in the audited specification;
+- a documented stakeholder decision.
+
+The report must name the authoritative source and show where it was found.
+
+If the audit proves that two terms conflict but does not prove which term is
+authoritative:
+
+- do not invent a preferred term;
+- do not mark either term as approved;
+- mark the concept as `needs stakeholder input`;
+- state the exact decision the stakeholder must make;
+- treat the specification as not agent-ready.
+
+A terminology mismatch proves that a decision is needed. It does not prove
+which term should win.
+
 3. **The preferred term**, using these default heuristics:
    - An existing code identifier or externally-published API/field name
      always wins if the feature is already implemented.
@@ -153,30 +181,6 @@ the one that would cause the worst generation error if an agent picked
 the wrong meaning — lead the report's summary with this.
 
 
-Authority required for conflicts
-
-Never choose a preferred term for a ✕ conflict unless the authoritative evidence supporting that choice is included in the audit evidence.
-
-
-### Authoritative evidence may include:
-
-an existing implementation identifier;
-a database schema or interface contract;
-a published API or field name;
-an explicit definition elsewhere in the audited specification;
-a documented stakeholder decision.
-
-The report must name the authoritative source and show where it was found.
-
-If the audit proves that two terms conflict but does not prove which term is authoritative:
-
-do not invent a preferred term;
-do not mark either term as approved;
-mark the concept as needs stakeholder input;
-state the exact decision the stakeholder must make;
-treat the specification as not agent-ready.
-
-A terminology mismatch proves that a decision is needed. It does not prove which term should win.
 
 
 
@@ -278,7 +282,8 @@ Produce `terminology-audit-report.md` with these sections:
    concept. Sort or flag so `behavioral` rows are easy to find first.
 3. **Items needing stakeholder input** — treat this as a blocking
    checklist, not optional reading, since Step 4 means these must be
-   resolved before generation.
+   resolved before generation. Include every `✕` conflict for which no
+   authoritative source proves which term should win.
 4. **Recommendations** — concrete next steps; where the termbase is
    fully resolved, explicitly recommend adding it to `AGENTS.md` or
    equivalent, so the audit closes the loop into the SDD workflow rather
