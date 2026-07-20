@@ -1,310 +1,262 @@
 ---
 name: sdd-terminology-audit
-description: Audit spec-driven development specifications and requirements for vocabulary ambiguity that could lead developers or coding agents to interpret the same concept differently. Produce an evidence-backed terminology audit report and a CSV termbase of supported canonical terms. Use for SDD specs, requirement files, Given/When/Then scenarios, MUST/SHALL statements, schemas, interfaces, and other documents intended to guide implementation. Do not use for general prose editing or broad logical-consistency review.
+description: Audit implementation-facing specifications and requirements for terminology ambiguity that could cause developers or coding agents to interpret the same concept differently. Use for SDD specs, requirement files, Given/When/Then scenarios, MUST/SHALL statements, schemas, interfaces, commands, states, events, errors, and field names. Produce an evidence-backed Markdown report and CSV termbase. Do not use for general prose editing, completeness review, readiness assessment, or broad logical-consistency review.
 ---
 
 # SDD Terminology Audit
 
-Audit terminology in specifications used to guide implementation. Identify places where different wording could cause the same concept to be interpreted, named, filtered, stored, or implemented differently.
+Audit only vocabulary ambiguity in implementation-facing specifications.
 
-Produce two files:
+The goal is practical:
 
-- `terminology-audit-report.md`: evidence and explanations for terminology findings.
-- `termbase.csv`: supported canonical vocabulary for resolved concepts.
+> A developer reading the report must know exactly which sentence to clarify and why.
 
-Do not execute code. Read only the specification files and any implementation or domain sources explicitly included in the audit scope.
+Produce:
 
-## Scope boundary
+- `terminology-audit-report.md`
+- `termbase.csv`
 
-This is a terminology audit, not a complete specification review.
+Do not execute code. Inspect only files explicitly included in the audit scope.
 
-Only report a terminology finding when wording creates a vocabulary problem, such as:
+## 1. Scope boundary
 
-- two labels appear to name the same concept;
-- one label appears to name different concepts;
-- a term has two plausible meanings in the audited material;
-- an abbreviation and expanded form could create separate identifiers;
-- a field, state, command, event, or error is named inconsistently;
-- a generic phrase weakens or broadens a more precise implementation term.
+A terminology finding exists only when wording can materially change an implementation-facing concept such as a name, field, filter, file set, state, command, event, error, API, or stored value.
 
-Do not classify these as terminology findings:
+Do not report:
 
+- style preferences;
+- harmless shorthand;
+- capitalization, hyphenation, or grammatical variation by itself;
 - missing execution order;
-- missing optional-versus-required behaviour;
+- missing optional-versus-required behavior;
 - missing inputs or outputs;
 - incomplete acceptance criteria;
 - unstated implementation details;
-- logical contradictions expressed with consistent vocabulary;
-- general writing quality or style preferences.
+- logical contradictions that use consistent vocabulary;
+- general writing quality issues.
 
-Omit out-of-scope observations. Do not add a separate specification-review section.
+Omit out-of-scope observations entirely.
 
-## Workflow
+## 2. Inventory the audit scope
 
-### Step 1 — Inventory the audit scope
+List:
 
-List every specification file included in the audit.
+- every specification file audited;
+- every additional authority source inspected.
 
-Also list any additional sources explicitly inspected to establish terminology authority, such as:
-
-- implementation identifiers;
-- database schemas;
-- interface contracts;
-- published APIs;
-- repository conventions;
-- documented stakeholder decisions.
+Authority sources may include implementation identifiers, schemas, interface contracts, published APIs, repository conventions, or documented stakeholder decisions.
 
 Do not claim authority from a source that was not inspected.
 
-### Step 2 — Extract exact evidence
+## 3. Extract exact evidence
 
-Read the specification directly. Extract candidate terminology from structural positions that can influence implementation:
+Copy the smallest useful exact fragments from the specification and authority sources.
 
-- Given/When/Then subjects and objects;
-- preconditions, postconditions, and invariants;
-- MUST, SHALL, and MUST NOT statements;
-- interface, field, parameter, and schema names;
-- state and transition names;
-- commands, workflows, events, errors, and status codes.
-
-Also record contextual wording when it appears to name the same concept differently.
-
-Build an evidence table before classifying anything:
+Use this evidence table:
 
 | Exact text | Structural position | Source location | Candidate concept |
 | --- | --- | --- | --- |
 
-Rules:
+Prioritize wording in:
 
-- Copy the smallest useful exact fragment.
-- Do not normalise or paraphrase it.
-- Record repeated occurrences when they appear in different structural positions.
-- Give a source location precise enough for a reader to find the wording.
-- Do not infer behaviour that is absent from the source.
+- Given/When/Then steps;
+- MUST, SHALL, and MUST NOT statements;
+- preconditions, postconditions, and invariants;
+- fields, parameters, schemas, and interfaces;
+- states, transitions, commands, workflows, events, errors, and status codes.
 
-### Step 3 — Group wording by concept
+Do not normalize, paraphrase, or infer missing behavior while collecting evidence.
 
-For each concept, group all observed variants, including:
+## 4. Mandatory finding gate
 
-- abbreviations and expanded forms;
-- singular and plural forms;
-- hyphenation and capitalisation variants;
-- generic and specific labels;
-- near-synonyms with no shared surface wording.
+Apply this gate before adding any `△` or `✕` finding.
 
-Before calling something ambiguous, write down at least two plausible interpretations supported by the audited evidence.
+A finding is allowed only when every answer below is **yes**:
 
-If two plausible interpretations cannot be shown, do not classify the wording as `△` or `✕`.
+1. Can you quote the exact sentence or fragment the developer must clarify?
+2. Can you show two meanings or competing terms supported by the audited evidence?
+3. Would those alternatives produce a materially different implementation-facing result?
+4. Does nearby context fail to resolve the difference?
+5. Is the issue genuinely vocabulary ambiguity rather than missing behavior or detail?
 
-#### Finding threshold
+If any answer is **no**, omit the finding.
 
-Only include a terminology finding when all of these are true:
+For every proposed finding, write this internal check before classification:
 
-1. You can quote the exact sentence or fragment the developer must clarify.
-2. You can show at least two plausible interpretations of that wording, or two incompatible terms for the same implementation concept.
-3. You can describe one concrete implementation difference those interpretations could cause.
-4. The difference is material to naming, filtering, storage, states, APIs, commands, events, errors, or another implementation-facing concept.
-5. The finding is not merely a style preference, harmless shorthand, grammatical variation, or wording that is already made clear by nearby context.
+- **Sentence to clarify:** exact wording.
+- **Interpretation A:** evidence-supported meaning.
+- **Interpretation B:** evidence-supported different meaning.
+- **Implementation difference:** exact name, filter, file set, field, state, API, command, event, error, or stored value that could differ.
+- **Nearby-context check:** why surrounding text does not already settle the meaning.
 
-Do not report a finding when:
+Do not include this internal check in the final report unless the finding passes.
 
-- adding or removing a word does not change any plausible implementation outcome;
-- the surrounding sentence already resolves the meaning;
-- the only difference is capitalization, hyphenation, singular/plural grammar, or expanded versus abbreviated form and no separate identifier family is likely;
-- the interpretation requires inventing facts not present in the audited evidence;
-- the issue is really missing behaviour, execution order, optionality, completeness, or implementation detail.
+### Automatic rejection rules
 
-When authority sources also use the competing variants inconsistently, do not choose a winner. Report the undefined relationship between the terms and mark the decision unresolved.
+Reject the finding when:
 
-Apply this success test to every proposed finding:
+- one interpretation depends on invented facts;
+- the difference would not change implementation;
+- the surrounding sentence names the precise concept already;
+- authority sources use the supposedly non-preferred term for the same concept;
+- the issue is only that one phrase is more precise or elegant;
+- a developer would not know which exact sentence to edit.
 
-> Would a developer reading the report know exactly which sentence to clarify and why?
+## 5. Authority and unresolved decisions
 
-If the answer is no, omit the finding.
+Use authority only from inspected sources, in this order:
 
-### Step 4 — Apply authority carefully
-
-Use this authority order only when the relevant source is inside the declared audit scope:
-
-1. Existing implementation identifiers, schemas, or public contracts.
+1. Existing implementation identifiers, schemas, and public contracts.
 2. Explicit definitions in the audited specification.
 3. Documented product or domain vocabulary.
 4. Consistent usage across the audited specification.
 
-Never choose a preferred term for a `✕` conflict unless the report shows the authoritative evidence supporting that choice.
+Choose supported wording only when the evidence clearly establishes it.
 
-If the evidence proves a mismatch but does not prove which term should win:
+If authority sources use competing variants inconsistently:
 
-- do not invent a preferred term;
-- mark the concept as requiring stakeholder input;
-- state the exact terminology decision that remains unresolved;
-- omit that concept from the resolved termbase.
+- do not choose a winner;
+- describe the relationship between the terms as undefined;
+- mark the terminology decision unresolved;
+- omit the concept from `termbase.csv`;
+- list the exact choice under `Items Needing Stakeholder Input`.
 
-A mismatch proves that a decision may be needed. It does not prove which wording is correct.
+A mismatch proves that clarification may be needed. It does not prove which wording is correct.
 
-### Step 5 — Classify each wording occurrence
+## 6. Classification
 
-Use these symbols:
+Use:
 
 | Symbol | Meaning |
 | --- | --- |
-| `●` | Preferred and unambiguous in the audited scope |
-| `○` | Understandable in context, but not the supported canonical wording |
-| `△` | The wording has at least two plausible interpretations |
-| `✕` | The audited sources use incompatible terminology for the same implementation concept |
+| `●` | Supported and unambiguous in the audited scope |
+| `○` | Understandable variation that does not create a material implementation ambiguity |
+| `△` | One wording has two evidence-supported meanings that could change implementation |
+| `✕` | Audited sources use incompatible terms for the same implementation concept |
 
-Tag each occurrence by spec position:
+Use `behavioral` for normative or executable specification text and `contextual` for supporting prose.
 
-| Spec position | Meaning |
-| --- | --- |
-| `behavioral` | Appears in normative or executable specification text |
-| `contextual` | Appears in explanatory or background text |
+Do not add severity, risk, readiness, safety, approval, or blocking labels.
 
-Do not add high, medium, low, blocking, critical, readiness, or safety ratings.
+`○` rows are supporting context only. Never include them in `Terminology Findings`.
 
-Build one settled classification table and use it as the single source for both deliverables.
+## 7. Build `termbase.csv`
 
-### Step 6 — Build `termbase.csv`
-
-Include only concepts for which the preferred terminology is supported by evidence.
+Include only resolved concepts with evidence-supported wording.
 
 Use these columns:
 
 | Column | Meaning |
 | --- | --- |
 | `term_id` | Stable lowercase slug |
-| `preferred_term` | Supported canonical label |
+| `preferred_term` | Evidence-supported canonical label |
 | `part_of_speech` | noun, verb, adjective, or proper noun |
 | `definition` | One or two plain-language sentences |
 | `usage_context` | Where and how the term is used |
 | `forbidden_variants` | Semicolon-separated non-preferred variants |
-| `source_locations` | Sources supporting the term decision |
+| `source_locations` | Evidence supporting the decision |
 
-Quote CSV fields containing commas.
+Do not include unresolved concepts, recommendations, proposed behavior, or terms chosen only because they sound clearer.
 
-Do not include:
+## 8. Write `terminology-audit-report.md`
 
-- unresolved concepts;
-- invented requirements;
-- implementation proposals;
-- audit commentary;
-- status labels inside `preferred_term`;
-- terms chosen only because they sound clearer.
+Use exactly these sections.
 
-An empty `forbidden_variants` field is valid.
+### 1. Summary
 
-### Step 7 — Write `terminology-audit-report.md`
+State only:
 
-Use only these sections.
-
-#### 1. Summary
-
-State:
-
-- files and authority sources audited;
-- number of `✕` conflicts;
-- number of `△` ambiguities;
+- files audited;
+- authority sources inspected;
+- number of `✕` findings;
+- number of `△` findings;
 - number of unresolved terminology decisions.
 
-Do not state or imply that the specification is:
+Do not make readiness, safety, completeness, approval, severity, or workflow claims.
 
-- agent-ready or not agent-ready;
-- safe or unsafe for code generation;
-- complete or incomplete;
-- approved or rejected;
-- ready for `AGENTS.md` or any other workflow.
+### 2. Evidence Table
 
-Do not rank findings as highest risk, high severity, medium severity, blocking, or critical.
+Include the evidence table.
 
-#### 2. Evidence Table
+### 3. Terminology Findings
 
-Include the evidence table from Step 2.
+Include only findings that passed the Mandatory finding gate.
 
-#### 3. Terminology Findings
+Use:
 
-Include only `△` and `✕` findings that pass the Finding threshold. Do not list harmless `○` variations as findings. A `○` may appear only in the Settled Classification Table as supporting context.
-
-Omit rows where every occurrence is `●` or `○`.
-
-Use this table:
-
-| Concept | Variants observed | Supported wording | Spec position | Locations |
+| Sentence to clarify | Concept | Variants or meanings | Judgment | Supported wording |
 | --- | --- | --- | --- | --- |
 
-For unresolved concepts, write `Unresolved` in `Supported wording`.
+For unresolved findings, write `Unresolved` in `Supported wording`.
 
-Do not use headings such as `Recommendations`, `Next steps`, `Evidence-based next steps`, or `Action items`.
+Do not include `●` or `○` rows here.
 
-#### 4. Settled Classification Table
+### 4. Why Each Finding Matters
 
-Immediately print both legends, then use these exact columns:
+For every finding, use one compact block:
 
-| Concept | Wording found in spec | Judgment | Spec position | Wording to use |
+| Field | Content |
+| --- | --- |
+| `Sentence to clarify` | Exact sentence or fragment |
+| `Interpretation A` | Evidence-supported meaning |
+| `Interpretation B` | Different evidence-supported meaning |
+| `What could differ` | Concrete implementation-facing difference |
+| `Why context does not settle it` | Brief explanation |
+| `Evidence` | Exact contrasting wording or authority source |
+| `Terminology decision` | Supported wording or exact unresolved choice |
+
+Do not invent hypothetical implementations that are not grounded in the audited evidence.
+
+### 5. Settled Classification Table
+
+Print the symbol and spec-position legends first.
+
+Use:
+
+| Concept | Wording found | Judgment | Spec position | Wording to use |
 | --- | --- | --- | --- | --- |
+
+Include `●` and `○` rows only when they help explain a reported `△` or `✕` finding. Do not fill this table with unrelated approved terminology.
 
 For unresolved concepts, write `Unresolved` in `Wording to use`.
 
-Do not use internal labels such as `Variant/card`, `Symbol`, `Severity`, or `Preferred term` as column headings.
-
-#### 5. Why the Flagged Wording Matters
-
-For every `△` or `✕`, include one compact teaching block:
-
-| Field | Required content |
-| --- | --- |
-| `What the spec says` | The smallest exact flagged fragment |
-| `Possible interpretation A` | One plausible meaning supported by the evidence |
-| `Possible interpretation B` | A different plausible meaning supported by the evidence |
-| `What could differ in implementation` | One concrete naming, filtering, storage, state, API, or behavioural difference |
-| `Evidence` | The exact contrasting wording or authoritative source |
-| `Terminology decision` | The supported wording, or the exact stakeholder choice if unresolved |
-
-Keep each block brief and plain-language. Teach the reader why the wording matters without making predictions about overall code-generation success.
-
-For `○` findings, a teaching block is optional. Include one only when the difference is not obvious.
-
-#### 6. Items Needing Stakeholder Input
+### 6. Items Needing Stakeholder Input
 
 List only unresolved terminology choices.
 
-For each item state:
+For each, state:
 
-- the competing wording;
-- why authority could not be established;
-- the exact naming or meaning decision required.
+- the exact sentence to clarify;
+- the competing terms or meanings;
+- why audited authority does not settle the choice;
+- the exact decision required.
 
-Write `None` when every preferred term is supported by audited evidence.
+Write `None` when no terminology decision is unresolved.
 
-Do not include corrections, recommendations, workflow advice, or implementation suggestions in this section.
-
-#### 7. Scope Limitation
+### 7. Scope Limitation
 
 State that the audit covers vocabulary ambiguity only and does not evaluate logical consistency, requirement completeness, technical feasibility, or implementation correctness.
 
-## Report quality checks
+Do not include recommendations, next steps, action items, readiness claims, or workflow advice anywhere in the report.
 
-Before delivery, verify all of the following:
+## 9. Final quality check
 
-- Every reported finding identifies the exact sentence or fragment a developer must clarify.
-- Every reported finding explains why clarification is needed in plain language.
-- Every `△` shows two plausible interpretations supported by audited evidence.
-- Every `✕` shows incompatible terminology for one implementation concept and a concrete implementation difference.
-- Harmless shorthand, grammatical variants, and nearby-context-resolved wording are omitted.
-- If authority sources use competing variants inconsistently, the report does not invent a winner.
-- The success test passes for every finding: a developer can identify exactly which sentence to clarify and why.
-- Every selected preferred term has visible authoritative evidence.
-- Every unresolved conflict appears under `Items Needing Stakeholder Input`.
-- No unresolved concept appears in `termbase.csv`.
-- The report and termbase use the same preferred wording.
-- The report contains no readiness, safety, approval, severity-ranking, recommendation, or next-step claims.
-- The report contains no out-of-scope specification findings.
-- A reader can trace every finding from exact wording to classification and authority.
+Before delivery, remove any finding that fails even one check:
+
+- The exact sentence to clarify is visible.
+- Two alternatives are supported by evidence.
+- The alternatives cause a concrete implementation-facing difference.
+- Nearby context does not settle the meaning.
+- The issue is terminology, not missing behavior.
+- Authority is visible for every selected term.
+- Inconsistent authority results in `Unresolved`, not an invented winner.
+- A developer can immediately answer: “Which sentence do I edit, and why?”
+
+If no finding passes, report zero findings. A short report with zero findings is better than weak findings.
 
 ## Deliver
 
-Save and return:
+Return:
 
-- `termbase.csv`
 - `terminology-audit-report.md`
-
-Deliver both even when terminology decisions remain unresolved.
+- `termbase.csv`
