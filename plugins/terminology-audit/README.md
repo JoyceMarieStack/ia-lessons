@@ -1,17 +1,18 @@
 # terminology-audit
 
 A Claude Code skill that audits technical/engineering docs for inconsistent
-terminology and produces three deliverables:
+terminology and produces two deliverables:
 
 1. **Termbase** — a structured glossary of preferred terms (definition,
    part of speech, usage context, forbidden variants), formatted close to
    what TMS/CAT localization tools expect.
-2. **Stem-and-leaf diagram** — an ASCII/Markdown diagram showing, per
-   concept, which real-world terms are in use, how often, in which source,
-   and whether usage is clean (`●`), narrower-but-correct (`○`), ambiguous
-   (`△`), or a true conflict (`✕`).
-3. **Audit report** — a written summary of what's inconsistent, why it
-   matters, and what to do about it.
+2. **Audit report** — a written summary of what's inconsistent, why it
+   matters, and what to do about it, including which conflict matters most
+   and which source uses terms most precisely.
+
+No bundled scripts or tooling — every deliverable is written directly by
+the agent, so the skill runs the same regardless of which agent or
+environment is running it.
 
 See [`skills/terminology-audit/SKILL.md`](skills/terminology-audit/SKILL.md)
 for the full workflow the skill follows, and
@@ -33,7 +34,5 @@ terminology-audit/
 │   └── plugin.json
 └── skills/
     └── terminology-audit/
-        ├── SKILL.md
-        └── scripts/
-            └── build_diagram.py   # renders the stem-and-leaf diagram
+        └── SKILL.md
 ```

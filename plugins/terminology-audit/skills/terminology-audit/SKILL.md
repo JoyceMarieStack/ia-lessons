@@ -1,29 +1,26 @@
 ---
 name: terminology-audit
-description: Audit technical/engineering docs for inconsistent terminology, then produce (1) a termbase/glossary of preferred terms with metadata, (2) an ASCII stem-and-leaf diagram of which terms dominate and which conflict, and (3) a written audit report of inconsistencies and recommendations. Use whenever the user asks to audit, standardize, clean up, or reconcile terminology, naming, or word choice across docs, wikis, API references, READMEs, specs, or user-facing strings — even phrased as "we use too many words for the same thing," "make our terms consistent," "build a glossary," "show me a stem and leaf diagram," or "check our naming conventions." Also trigger for vocabulary/lexicon review, "how do we talk about X," naming conflicts across standards/specs, style-guide term sections, variant/synonym cleanup, or prepping term lists for TMS/CAT localization pipelines.
+description: Audit technical/engineering docs for inconsistent terminology, then produce (1) a termbase/glossary of preferred terms with metadata and (2) a written audit report of inconsistencies and recommendations. Use whenever the user asks to audit, standardize, clean up, or reconcile terminology, naming, or word choice across docs, wikis, API references, READMEs, specs, or user-facing strings — even phrased as "we use too many words for the same thing," "make our terms consistent," "build a glossary," or "check our naming conventions." Also trigger for vocabulary/lexicon review, "how do we talk about X," naming conflicts across standards/specs, style-guide term sections, variant/synonym cleanup, or prepping term lists for TMS/CAT localization pipelines.
 ---
 
 # Terminology Audit
 
 Audits a set of technical/engineering documents, finds places where multiple
 terms are used for the same underlying concept (or the same term is used
-inconsistently), and produces three deliverables:
+inconsistently), and produces two deliverables:
 
 1. **Termbase** — a structured glossary of preferred terms with metadata
    (definition, part of speech, usage context, forbidden variants).
-2. **Stem-and-leaf diagram** — an ASCII/Markdown diagram showing, for each
-   concept, which real-world terms ("leaves") are in use, how often, in
-   which source, and whether that usage is clean or conflicting.
-3. **Audit report** — a written summary of what's inconsistent, why it
+2. **Audit report** — a written summary of what's inconsistent, why it
    matters, and what to do about it, organized so an engineering/docs team
    can act on it.
 
 This is fundamentally a judgment task, not a pure text-processing task.
 Do the extraction and classification yourself by reading the source
-documents closely — don't look for a script to do this part. The only
-bundled script (`scripts/build_diagram.py`) exists purely to render the
-diagram's ASCII layout once you've done the thinking; it does not do any
-of the extraction or judgment.
+documents closely — don't look for a script to do this. There is no
+bundled tooling for this skill; every deliverable is written directly, so
+it runs the same way regardless of which agent or environment is running
+it.
 
 ## When there's no existing termbase to check against
 
@@ -45,9 +42,8 @@ included too.
 
 ### Step 2 — Read and extract terms yourself (per source, not just globally)
 
-Read through each source document directly — don't rely on a frequency
-script for this. As you read, keep a running per-source tally for terms
-that carry definitional weight:
+Read through each source document directly. As you read, keep a running
+per-source tally for terms that carry definitional weight:
 
 - headings, bold text, first-use-in-a-section
 - phrases like "X means…", "X is defined as…", or any term in a normative
@@ -104,26 +100,25 @@ reaching for, stripped of the specific word choice — work out:
    - When usage is a genuine toss-up, don't force a decision — mark it as
      `needs stakeholder input` and classify it `ambiguous` rather than
      guessing.
-4. **A classification for every term+source pair** ("card"), using this
-   four-way scheme:
+4. **A classification for every term+source pair**, using this four-way
+   scheme:
 
-   | Symbol | Meaning | Rule |
+   | Label | Meaning | Rule |
    |--------|---------|------|
-   | `●` unambiguous | Clearly scoped — one meaning, matches the concept precisely, and is (or should become) the preferred term |
-   | `○` correct-in-context | Technically correct but narrower or more specific than the concept |
-   | `△` ambiguous | The reader has to guess which meaning applies; used inconsistently within or across sources |
-   | `✕` conflict | The same word appears in another source, or another part of the same source, with an incompatible meaning |
+   | unambiguous | Clearly scoped — one meaning, matches the concept precisely, and is (or should become) the preferred term |
+   | correct-in-context | Technically correct but narrower or more specific than the concept |
+   | ambiguous | The reader has to guess which meaning applies; used inconsistently within or across sources |
+   | conflict | The same word appears in another source, or another part of the same source, with an incompatible meaning |
 
-   A term earns `✕` specifically when reusing the *same word* for two
-   *different* concepts (real conflict), not merely when two words compete
-   for the same concept (that's `△` on the losing variant, or `○` if it's
-   just a narrower valid usage).
+   A term earns `conflict` specifically when reusing the *same word* for
+   two *different* concepts (real conflict), not merely when two words
+   compete for the same concept (that's `ambiguous` on the losing variant,
+   or `correct-in-context` if it's just a narrower valid usage).
 
-Out of everything classified `✕`, identify the one conflict that would
-cause the worst operational or compliance failure if a reader picked the
-wrong meaning — this becomes the diagram's callout. Also note which single
-source uses terms most precisely and consistently overall — this becomes
-"best existing practice."
+Out of everything classified `conflict`, identify the one conflict that
+would cause the worst operational or compliance failure if a reader picked
+the wrong meaning — this becomes the report's top callout. Also note which
+single source uses terms most precisely and consistently overall.
 
 ### Step 4 — Build the termbase
 
@@ -148,72 +143,7 @@ downstream with minimal reformatting if they're localizing content.
 Quote any field containing a comma so the CSV stays well-formed (standard
 CSV quoting: wrap the field in double quotes).
 
-### Step 5 — Build the stem-and-leaf diagram
-
-Group the concepts from Step 3 into 2–3 sections by layer or intent (e.g.
-"Technical Model", "Operational", "Ambiguous / Unresolved" — name sections
-to fit the actual material, this is just a starting pattern). Then build
-the JSON input the renderer expects:
-
-```json
-{
-  "topic": "Short topic name for the title",
-  "sections": [
-    {
-      "name": "SECTION NAME",
-      "stems": [
-        {
-          "stem": "concept name, 3-5 words",
-          "description": "what the author was reaching for",
-          "cards": [
-            {"symbol": "unambiguous", "term": "access token", "source": "auth-guide.md", "count": 12}
-          ]
-        }
-      ]
-    }
-  ],
-  "conflict_callout": "One sentence naming the worst ✕ conflict and why it matters operationally.",
-  "best_practice": "Which source uses terms most precisely, and why."
-}
-```
-
-`symbol` accepts the long-form names: `unambiguous`, `correct_in_context`,
-`ambiguous`, `conflict`. `count` should be your per-source count from Step 2
-where available (omit `count` for terms observed only in pasted/inline text
-with no reliable repetition data — the renderer will drop the bar for that
-card rather than fabricate a number).
-
-Keep each `description` to a handful of short words — the renderer wraps
-on spaces only, so a single long unbroken word can get truncated mid-word
-in the narrow stem column. Short, plain phrases render best.
-
-Render it:
-
-```bash
-python3 scripts/build_diagram.py /tmp/diagram_input.json terminology-diagram.md
-```
-
-**Always use this script for the diagram — do not hand-write the ASCII
-table yourself.** Fixed-width box-drawing columns and proportional
-frequency bars are exactly the kind of formatting that's easy to get
-subtly wrong by eye (columns drift half a character off row to row, bar
-lengths stop being proportional) and hard for a reader to notice is wrong
-without measuring it. The script guarantees exact, consistent alignment
-every time; free-hand ASCII art does not.
-
-**Edge cases:**
-- **No conflicts found** — still build the diagram; note in `conflict_callout`
-  that usage is consistent and name the most reliable source instead.
-- **Tiny corpus (< 3 sources)** — still run it, but say in the topic/intro
-  that conflicts may emerge as more sources are added.
-- **Term appears in only one source** — include it only if it carries
-  definitional weight (heading, bold, "X means…") or is a plausible future
-  conflict; omit purely incidental one-off mentions.
-- **No focus concept given** — don't try to diagram everything. Pick the
-  3–5 concept families with the most internal variation from your Step 2
-  reading — those surface the most useful drift.
-
-### Step 6 — Write the audit report
+### Step 5 — Write the audit report
 
 Produce `terminology-audit-report.md` with these sections:
 
@@ -223,7 +153,7 @@ Produce `terminology-audit-report.md` with these sections:
 2. **Inconsistencies found** — a table: Concept | Variants observed |
    Recommended preferred term | Locations | Notes. Group by concept, not by
    individual word. This can lean on the same Step 3 analysis as the
-   diagram — don't re-derive it from scratch.
+   termbase — don't re-derive it from scratch.
 3. **Items needing stakeholder input** — cases from Step 3 marked
    `needs stakeholder input`, with the competing options and why it's not a
    clear call (e.g. legal trademark vs. common usage, product naming vs.
@@ -237,13 +167,22 @@ content is naturally tabular. This is a working document for a docs/eng
 team, not a formal deliverable, so avoid padding it with generic
 boilerplate about "the importance of consistent terminology."
 
-### Step 7 — Deliver
+**Edge cases:**
+- **No conflicts found** — still write the report; say so plainly and name
+  the most reliable source instead.
+- **Tiny corpus (< 3 sources)** — still run it, but note in the Summary
+  that conflicts may emerge as more sources are added.
+- **Term appears in only one source** — include it only if it carries
+  definitional weight (heading, bold, "X means…") or is a plausible future
+  conflict; omit purely incidental one-off mentions.
 
-Save all three files (`termbase.csv`, `terminology-diagram.md`,
-`terminology-audit-report.md`) to the outputs directory and present them
-together. If the user only asked for a subset (e.g. just the diagram, or
-just the termbase), still run Steps 1–3 in full since the analysis is
-shared, but only render/deliver the piece(s) they asked for.
+### Step 6 — Deliver
+
+Save both files (`termbase.csv`, `terminology-audit-report.md`) to the
+outputs directory and present them together. If the user only asked for a
+subset (e.g. just the termbase, or just the report), still run Steps 1–3
+in full since the analysis is shared, but only render/deliver the piece(s)
+they asked for.
 
 ## Notes on scale
 
@@ -251,7 +190,7 @@ For a handful of files, read them directly and do Steps 2–3 by hand as
 described above — that's the default path for this skill. For a very
 large corpus (dozens of files or a full docs site) where reading
 everything in full isn't feasible in one pass, say so explicitly in the
-report's Summary and the diagram's intro (e.g. "prioritized the most
-prominent recurring terms across N files; a full manual pass would catch
-additional low-frequency variants"), and prioritize the files most likely
-to define core concepts (READMEs, glossaries, core-concepts docs) first.
+report's Summary (e.g. "prioritized the most prominent recurring terms
+across N files; a full manual pass would catch additional low-frequency
+variants"), and prioritize the files most likely to define core concepts
+(READMEs, glossaries, core-concepts docs) first.

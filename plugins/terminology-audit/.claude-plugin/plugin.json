@@ -1,7 +1,7 @@
 {
   "name": "terminology-audit",
-  "version": "1.0.0",
-  "description": "Audit technical/engineering docs for inconsistent terminology and produce a termbase, a stem-and-leaf diagram of term drift, and a written audit report.",
+  "version": "2.0.0",
+  "description": "Audit technical/engineering docs for inconsistent terminology and produce a termbase and a written audit report.",
   "author": {
     "name": "JoyceMarieStack"
   }

@@ -5,8 +5,9 @@ A Claude Code plugin marketplace repo. Currently distributes one plugin:
 ## Plugins
 
 - **[terminology-audit](plugins/terminology-audit/)** — audits technical/
-  engineering docs for inconsistent terminology and produces a termbase,
-  a stem-and-leaf diagram of term drift, and a written audit report.
+  engineering docs for inconsistent terminology and produces a termbase
+  and a written audit report. No bundled scripts — pure judgment work,
+  so it runs the same in any agent/environment.
 
 ## Install
 
@@ -32,5 +33,5 @@ plugins/
 examples/
   README.md                 # walkthrough notes
   sample-dataset/           # source docs used in the walkthrough
-  sample-reports/           # generated termbase/diagram/report output
+  sample-reports/           # generated termbase/report output
 ```

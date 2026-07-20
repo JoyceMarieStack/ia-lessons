@@ -24,15 +24,14 @@ What the Argo CD run produced is a real, worked example of a discipline called *
 
 ### 1. Concept vs. term — the foundational IA distinction
 
-The single most important idea underneath the termbase, diagram, and report: *a concept and the word used to describe it are not the same thing.*
+The single most important idea underneath the termbase and report: *a concept and the word used to describe it are not the same thing.*
 
-Each diagram "stem" is a concept; each "leaf" (card) is a term:
+Look at a single termbase row: `term_id` names the concept (what it IS); `preferred_term` and `forbidden_variants` are the competing labels pointing at it —
 
 ```
-ApplicationSet CRD/controller   ← the concept (what it IS)
-  ● ApplicationSet   68×        ← a term (a label pointing at it)
-  △ AppSet            9×        ← another term, same concept
-  ✕ Appset            3×        ← another term, same concept
+term_id: applicationset                              ← the concept (what it IS)
+preferred_term: ApplicationSet                        ← the canonical label
+forbidden_variants: AppSet; App Set; app-set; Appset  ← other terms, same concept
 ```
 
 This maps directly onto ISO 25964, the standard for thesauri:
@@ -47,7 +46,7 @@ This is exactly what `termbase.csv`'s `preferred_term` / `forbidden_variants` co
 - **Synonymy** = different words, same concept. Fixable by picking a preferred term. → `destination cluster` vs. `target cluster` (both mean the same field).
 - **Polysemy / homograph collision** = the same word, different concepts. Not fixable by picking a preferred term — you have to disambiguate by context or rename one usage. → `Appset-Any-Namespace.md`'s casing colliding with the real `ApplicationSet` CRD name.
 
-The diagram encodes this distinction with different symbols — `△` (ambiguous synonym competing for the same concept) vs. `✕` (true collision — same label, different concepts). Not decoration: real IA triage, since these two problems need entirely different fixes.
+The report's "Notes" column carries this distinction in prose rather than a symbol — flagging a row as a genuine synonym pair to standardize (`destination cluster`/`target cluster`) reads and is fixed completely differently than flagging a row as a true collision (`Appset-Any-Namespace.md`, called out explicitly as "the one true naming collision" in the report). Not a wording nuance: these two problems need entirely different fixes, and conflating them in the write-up would send a team down the wrong one.
 
 ### 3. False synonyms — the trap good IA work catches
 
@@ -55,15 +54,9 @@ The best move in the report was actually a *non-fix*: `rollback (16)` vs. `rever
 
 This is the inverse of the mistake beginners make: seeing two similar-sounding words and assuming they're a "vocabulary inconsistency" to merge. A naive frequency-based tool would flag rollback/revert as a variant pair (they're near-synonyms in casual English). Recognizing that Argo CD uses them for two different features (application-history rollback vs. Git/PR revert) is domain modeling — understanding what the words refer to, not just how they're spelled. Same with `OutOfSync` vs. `out-of-sync` vs. `out of sync` — not inconsistency at all, just English grammar (attributive vs. predicate adjective forms), correctly left alone.
 
-### 4. Faceted classification — the diagram's sections
+### 4. Faceted classification — grouping concepts by type, not alphabet
 
-```
-CORE OBJECT NAMES
-SYNC & OPERATIONS
-ABBREVIATIONS / AMBIGUOUS
-```
-
-Grouping concepts into these buckets is a lightweight version of faceted classification — organizing not by alphabetical term but by *type of thing* (objects/nouns vs. states/operations vs. meta-issues like unexpanded acronyms). Same underlying move as a card-sorting exercise in website IA: not "what do we call this," but "what kind of thing is this, and does that grouping reveal a pattern?" Here it reveals that most real problems cluster in "abbreviations" — a genuinely useful diagnostic, not just a formatting choice.
+Read down the Argo CD report's "Inconsistencies found" table and the concepts fall into natural clusters even with no explicit section headers: object/CRD names (`ApplicationSet`, `AppProject`), states and operations (`OutOfSync`, `out of sync`, `rollback` vs. `revert`), and unexpanded abbreviations (`SSO`, `CMP`). That's a lightweight version of faceted classification — organizing not by alphabetical term but by *type of thing*. Same underlying move as a card-sorting exercise in website IA: not "what do we call this," but "what kind of thing is this, and does that grouping reveal a pattern?" Here it reveals that most of the real, actionable problems cluster in "abbreviations" — a genuinely useful diagnostic that falls out of reading the table by type instead of top to bottom.
 
 ### 5. Findability and information scent
 
@@ -84,7 +77,7 @@ Recommendation #4 in the report — "add a Terminology section to the style guid
 Before handing specs to a coding agent, run the terminology audit on the spec files (not the finished docs) and treat it as a pre-flight check, the same way you'd run a linter before a build:
 
 1. **Run the audit on `specs/*.md`** instead of `docs/*.md`.
-2. **Fix every `✕` before the agent ever sees the spec.** Non-negotiable — a true conflict means the same word means two different things across the spec set. An AI agent generating code from that spec doesn't know which meaning was intended in a given section; it'll guess, consistently confidently, and the mistake won't surface until the generated code does the wrong thing.
+2. **Fix every true conflict before the agent ever sees the spec.** Non-negotiable — a true conflict means the same word means two different things across the spec set. An AI agent generating code from that spec doesn't know which meaning was intended in a given section; it'll guess, consistently confidently, and the mistake won't surface until the generated code does the wrong thing.
 3. **Resolve every "needs stakeholder input" row before generation, not after.** The direct SDD parallel to human-in-the-loop governance — exactly the ambiguities a human needs to settle before the planning phase hands off to code generation, because once code exists, disagreement about intent gets baked into behavior instead of staying visible as a question.
 4. **Feed the termbase into the agent's context directly** — this turns the audit from a report into an actual SDD artifact. `termbase.csv`'s `preferred_term` / `forbidden_variants` columns are a machine-readable ubiquitous-language table. Drop that into `AGENTS.md` or a Cursor/Claude Code rules file alongside the spec, so the agent isn't inferring the naming convention from inconsistent prose — it's given the resolved vocabulary as a constraint. That's the "structured input to reduce hallucinations" idea.
 
