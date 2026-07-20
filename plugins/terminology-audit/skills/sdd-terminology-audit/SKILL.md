@@ -153,6 +153,30 @@ the one that would cause the worst generation error if an agent picked
 the wrong meaning — lead the report's summary with this.
 
 
+Authority required for conflicts
+
+Never choose a preferred term for a ✕ conflict unless the authoritative evidence supporting that choice is included in the audit evidence.
+
+
+### Authoritative evidence may include:
+
+an existing implementation identifier;
+a database schema or interface contract;
+a published API or field name;
+an explicit definition elsewhere in the audited specification;
+a documented stakeholder decision.
+
+The report must name the authoritative source and show where it was found.
+
+If the audit proves that two terms conflict but does not prove which term is authoritative:
+
+do not invent a preferred term;
+do not mark either term as approved;
+mark the concept as needs stakeholder input;
+state the exact decision the stakeholder must make;
+treat the specification as not agent-ready.
+
+A terminology mismatch proves that a decision is needed. It does not prove which term should win.
 
 
 
