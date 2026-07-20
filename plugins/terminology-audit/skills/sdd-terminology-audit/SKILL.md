@@ -1,398 +1,277 @@
 ---
 name: sdd-terminology-audit
-description: Audit spec-driven development (SDD) specification files — specs used as prompts for AI coding agents — for vocabulary ambiguity that could cause an agent to silently misinterpret intent during code generation. Produces (1) a termbase recording settled and unresolved terminology decisions and (2) an audit report distinguishing behavioral conflicts from contextual wording differences. Plain markdown/CSV output, no code execution, so results are portable to whatever tool consumes the spec (Claude Code, Cursor, GitHub Spec-Kit, Kiro, etc.). Use when the user asks to audit terminology in specs, requirement specifications, SDD specs, Given/When/Then scenarios, or files meant to be handed to an AI coding agent — not human docs (use the separate terminology-audit skill for that). Trigger on "audit my specs," "check terminology before I generate code," or cues like Given/When/Then, MUST/SHALL, interface contracts.
+description: Audit spec-driven development specifications and requirements for vocabulary ambiguity that could lead developers or coding agents to interpret the same concept differently. Produce an evidence-backed terminology audit report and a CSV termbase of supported canonical terms. Use for SDD specs, requirement files, Given/When/Then scenarios, MUST/SHALL statements, schemas, interfaces, and other documents intended to guide implementation. Do not use for general prose editing or broad logical-consistency review.
 ---
 
 # SDD Terminology Audit
 
-Audits spec-driven development (SDD) specification files for vocabulary
-ambiguity, with one goal that's different from ordinary documentation
-review: **the spec is the prompt.** A human reading a slightly
-inconsistent doc can usually infer intent from context. An AI coding
-agent generating code from a spec cannot ask for clarification — it
-silently picks an interpretation and generates code around it. That
-silent resolution is a form of hallucination risk specific to SDD, and
-it's what this skill exists to catch before it happens.
+Audit terminology in specifications used to guide implementation. Identify places where different wording could cause the same concept to be interpreted, named, filtered, stored, or implemented differently.
 
-This skill is the SDD-specific sibling of `terminology-audit` (for human
-documentation). Use that skill instead if auditing docs, READMEs, or
-other human-facing material — the rubric below is deliberately different
-and would misjudge severity if applied to prose written for people.
+Produce two files:
 
-**This skill produces plain markdown/CSV output only — no scripts, no
-code execution.** Specs written for SDD are meant to be consumed by
-whatever AI coding agent or tool a team uses, not just Claude Code, so
-the audit itself stays tool-agnostic: two files, produced entirely by
-reading and reasoning, portable to any workflow.
+- `terminology-audit-report.md`: evidence and explanations for terminology findings.
+- `termbase.csv`: supported canonical vocabulary for resolved concepts.
 
-## How this differs from documentation audits
+Do not execute code. Read only the specification files and any implementation or domain sources explicitly included in the audit scope.
 
-| | Documentation audit | This skill (SDD) |
-|---|---|---|
-| Definitional weight | Headings, bold, first-use | Structural spec elements: interface/field names, Given/When/Then subjects, preconditions/postconditions, schema keys |
-| Authority hierarchy | Defer to most authoritative *existing* doc | The spec itself is the top of the hierarchy; defer only to existing code identifiers if code already exists |
-| Severity | Reader confusion / operational risk to a human | Whether the ambiguous term sits in a part of the spec that compiles into behavior, vs. background/rationale prose |
-| "Done" bar for the termbase | Some rows can stay `needs stakeholder input` | **Zero** unresolved rows — an unresolved row handed to an agent is worse than no termbase at all |
-| Deliverables | Termbase, diagram, report | Termbase, report (no diagram) |
+## Scope boundary
+
+This is a terminology audit, not a complete specification review.
+
+Only report a terminology finding when wording creates a vocabulary problem, such as:
+
+- two labels appear to name the same concept;
+- one label appears to name different concepts;
+- a term has two plausible meanings in the audited material;
+- an abbreviation and expanded form could create separate identifiers;
+- a field, state, command, event, or error is named inconsistently;
+- a generic phrase weakens or broadens a more precise implementation term.
+
+Do not classify these as terminology findings:
+
+- missing execution order;
+- missing optional-versus-required behaviour;
+- missing inputs or outputs;
+- incomplete acceptance criteria;
+- unstated implementation details;
+- logical contradictions expressed with consistent vocabulary;
+- general writing quality or style preferences.
+
+Omit out-of-scope observations. Do not add a separate specification-review section.
 
 ## Workflow
 
-### Step 1 — Inventory the spec material
+### Step 1 — Inventory the audit scope
 
-List every spec file in scope. SDD specs are typically Markdown files
-under a `specs/` directory, organized per feature or user story. Note
-whether any implementation code already exists for this feature — if it
-does, existing identifiers in code outrank the spec's own wording (see
-Step 3).
+List every specification file included in the audit.
 
-### Step 2 — Read and extract terms by structural position, not typography
+Also list any additional sources explicitly inspected to establish terminology authority, such as:
 
-Read each spec directly. Unlike documentation, do not weight bold text or
-headings as primary signals — SDD specs are often written in fairly flat
-Markdown. Instead, extract terms based on where they sit structurally:
+- implementation identifiers;
+- database schemas;
+- interface contracts;
+- published APIs;
+- repository conventions;
+- documented stakeholder decisions.
 
-**High-weight positions (behavioral — this text becomes code):**
-- Given/When/Then step subjects and objects
-- Precondition / postcondition / invariant statements
-- Interface, field, and parameter names
-- MUST / SHALL / MUST NOT normative statements
-- State machine states and transition names
-- Error/exception names and status codes
+Do not claim authority from a source that was not inspected.
 
-**Low-weight positions (contextual — this text does not become code):**
-- Rationale, background, "why this feature exists" prose
-- Non-normative examples and illustrative commentary
-- Open questions / notes-to-self sections
+### Step 2 — Extract exact evidence
 
-Tag every candidate term with which bucket it came from. This tag carries
-through to severity classification in Step 3 — don't discard it.
+Read the specification directly. Extract candidate terminology from structural positions that can influence implementation:
 
-As with documentation audits, watch for near-miss synonym pairs sharing
-no surface characters (e.g., "cancel" vs. "void" vs. "revoke" all
-referring to one lifecycle action) — these are easy to miss by pattern
-matching and are exactly the kind of drift that produces inconsistent
-method/field naming in generated code.
+- Given/When/Then subjects and objects;
+- preconditions, postconditions, and invariants;
+- MUST, SHALL, and MUST NOT statements;
+- interface, field, parameter, and schema names;
+- state and transition names;
+- commands, workflows, events, errors, and status codes.
 
-### Step 2a — Build an evidence table before analysing concepts
+Also record contextual wording when it appears to name the same concept differently.
 
-Before grouping terms into concepts, build an evidence table that preserves
-the exact wording found in the specification. Use this table as the
-provenance trail for every later conclusion.
+Build an evidence table before classifying anything:
 
 | Exact text | Structural position | Source location | Candidate concept |
-|---|---|---|---|
+| --- | --- | --- | --- |
 
-Apply these rules:
+Rules:
 
-- Copy the wording exactly as it appears in the specification.
-- Do not paraphrase or silently normalise the wording at this stage.
-- Do not infer missing behaviour or invent a proposed requirement.
-- Record repeated occurrences separately when they appear in different
-  structural positions or sources.
-- Give each source location enough precision for a reader to find the text
-  directly, such as file, heading, requirement ID, scenario ID, or line range.
-- Ensure every term, variant, definition, and finding in the final outputs is
-  traceable to one or more rows in this evidence table.
+- Copy the smallest useful exact fragment.
+- Do not normalise or paraphrase it.
+- Record repeated occurrences when they appear in different structural positions.
+- Give a source location precise enough for a reader to find the wording.
+- Do not infer behaviour that is absent from the source.
 
-Keep this table as working analysis. Include its relevant evidence in the
-audit report so a reader can reconstruct why each conclusion was reached.
+### Step 3 — Group wording by concept
 
-### Step 3 — Concept-oriented analysis, spec-first authority
+For each concept, group all observed variants, including:
 
-For each distinct concept, work out:
+- abbreviations and expanded forms;
+- singular and plural forms;
+- hyphenation and capitalisation variants;
+- generic and specific labels;
+- near-synonyms with no shared surface wording.
 
-1. **All the terms used for it**, per source, from Step 2 (include
-   differing capitalization, pluralization, expanded vs. abbreviated
-   forms, and differing part-of-speech usage).
-2. **Authority order.** If implementation code already exists for this
-   feature, existing identifiers in that code outrank the spec's
-   wording — the spec should conform to what's already built, not the
-   reverse. If no code exists yet, the spec is the ground truth; there's
-   no more-authoritative source to defer to, so resolve conflicts by
-   which term better matches the domain's actual terminology (check for
-   existing product/business vocabulary if available) rather than by
-   deferring to "the most authoritative doc."
+Before calling something ambiguous, write down at least two plausible interpretations supported by the audited evidence.
 
-#### Authority required for conflicts
+If two plausible interpretations cannot be shown, do not classify the wording as `△` or `✕`.
 
-Never choose a preferred term for a `✕` conflict unless the authoritative
-evidence supporting that choice is included in the audit evidence.
+### Step 4 — Apply authority carefully
 
-Authoritative evidence may include:
+Use this authority order only when the relevant source is inside the declared audit scope:
 
-- an existing implementation identifier;
-- a database schema or interface contract;
-- a published API or field name;
-- an explicit definition elsewhere in the audited specification;
-- a documented stakeholder decision.
+1. Existing implementation identifiers, schemas, or public contracts.
+2. Explicit definitions in the audited specification.
+3. Documented product or domain vocabulary.
+4. Consistent usage across the audited specification.
 
-The report must name the authoritative source and show where it was found.
+Never choose a preferred term for a `✕` conflict unless the report shows the authoritative evidence supporting that choice.
 
-If the audit proves that two terms conflict but does not prove which term is
-authoritative:
+If the evidence proves a mismatch but does not prove which term should win:
 
 - do not invent a preferred term;
-- do not mark either term as approved;
-- mark the concept as `needs stakeholder input`;
-- state the exact decision the stakeholder must make;
-- record the conflict as unresolved and require stakeholder input before selecting a preferred term.
+- mark the concept as requiring stakeholder input;
+- state the exact terminology decision that remains unresolved;
+- omit that concept from the resolved termbase.
 
-A terminology mismatch proves that a decision is needed. It does not prove
-which term should win.
+A mismatch proves that a decision may be needed. It does not prove which wording is correct.
 
-3. **The preferred term**, using these default heuristics:
-   - An existing code identifier or externally-published API/field name
-     always wins if the feature is already implemented.
-   - Otherwise, prefer the term that best matches established domain/
-     business vocabulary over an invented or overly technical synonym.
-   - Prefer full/expanded forms as canonical, with abbreviations noted
-     as accepted shorthand after first use.
-   - When usage is a genuine toss-up, don't force a decision — mark it
-     `needs stakeholder input` and leave the preferred term unresolved.
-4. **A classification for every term+source pair** ("card"), using the
-   same four-way scheme as the documentation skill:
+### Step 5 — Classify each wording occurrence
 
-   | Symbol | Meaning |
-   |--------|---------|
-   | `●` unambiguous | Clearly scoped, matches the concept, is the preferred term |
-   | `○` correct-in-context | Technically correct but narrower than the concept |
-   | `△` ambiguous | Reader/agent has to guess which meaning applies |
-   | `✕` conflict | Same word, incompatible meaning across sources |
+Use these symbols:
 
-5. **A severity tag for every card**, carried over from Step 2:
-   `behavioral` (sits in a high-weight structural position) or
-   `contextual` (sits in prose/background). This is what separates
-   blocking issues from cosmetic ones in this skill — treat it as
-   mandatory, not optional metadata.
+| Symbol | Meaning |
+| --- | --- |
+| `●` | Preferred and unambiguous in the audited scope |
+| `○` | Understandable in context, but not the supported canonical wording |
+| `△` | The wording has at least two plausible interpretations |
+| `✕` | The audited sources use incompatible terminology for the same implementation concept |
 
-**Build one settled classification table before generating any
-deliverable.** Don't let the termbase and report re-derive judgments
-independently — decide the preferred term, status, symbol, and severity
-for every concept once, then generate both outputs from that single
-table. Cross-check before delivery: pick two or three concepts and
-confirm the preferred term, forbidden variants, and severity agree
-identically across the termbase and the report. If they don't agree, the
-analysis wasn't actually settled — resolve it, don't paper over the
-mismatch by picking whichever answer sounds most confident.
+Tag each occurrence by spec position:
 
-Out of everything classified `✕` with `behavioral` severity, identify
-the one that would cause the worst generation error if an agent picked
-the wrong meaning — lead the report's summary with this.
+| Spec position | Meaning |
+| --- | --- |
+| `behavioral` | Appears in normative or executable specification text |
+| `contextual` | Appears in explanatory or background text |
 
+Do not add high, medium, low, blocking, critical, readiness, or safety ratings.
 
+Build one settled classification table and use it as the single source for both deliverables.
 
+### Step 6 — Build `termbase.csv`
 
+Include only concepts for which the preferred terminology is supported by evidence.
 
-
-### Keep terminology decisions separate from specification findings
-
-Do not mix controlled-vocabulary decisions with specification-quality
-findings.
-
-A terminology decision answers:
-
-> What should this concept be called?
-
-A specification finding answers:
-
-> Is the behaviour involving this concept sufficiently and consistently
-> specified?
-
-Missing requirements, implied behaviour, conflicting acceptance criteria,
-and underspecified inputs or outputs belong in the audit report. They are not
-terms and must not become termbase rows unless the specification contains an
-actual vocabulary concept that needs a canonical label.
-
-Do not turn a proposed fix into a preferred term. For example, if the spec is
-unclear whether a response returns an IANA identifier, an abbreviation, or
-both, report that uncertainty as a specification finding. Do not create a
-preferred term such as `return both an IANA timezone identifier field and a
-timezone abbreviation field`.
-
-### Step 4 — Build the termbase, with a stricter completion bar
-
-Produce a CSV at `termbase.csv` (write it directly) with these columns:
+Use these columns:
 
 | Column | Meaning |
-|---|---|
-| `term_id` | short stable slug, e.g. `access-token` |
-| `preferred_term` | the canonical label |
-| `part_of_speech` | noun / verb / adjective / proper noun |
-| `definition` | 1–2 sentence definition in plain language |
-| `usage_context` | where/how it's used |
-| `forbidden_variants` | semicolon-separated list of terms NOT to use |
-| `status` | `approved` / `provisional` (never `needs stakeholder input` — see below) |
-| `severity` | `behavioral` or `contextual`, from Step 3 |
-| `source_locations` | file(s)/section(s) where this concept appears |
+| --- | --- |
+| `term_id` | Stable lowercase slug |
+| `preferred_term` | Supported canonical label |
+| `part_of_speech` | noun, verb, adjective, or proper noun |
+| `definition` | One or two plain-language sentences |
+| `usage_context` | Where and how the term is used |
+| `forbidden_variants` | Semicolon-separated non-preferred variants |
+| `source_locations` | Sources supporting the term decision |
 
-Quote any field containing a comma so the CSV stays well-formed.
+Quote CSV fields containing commas.
 
-#### Preferred term rules
+Do not include:
 
-The `preferred_term` field must contain only the canonical label for a
-concept. It must be a term a writer or coding agent can actually use.
+- unresolved concepts;
+- invented requirements;
+- implementation proposals;
+- audit commentary;
+- status labels inside `preferred_term`;
+- terms chosen only because they sound clearer.
 
-It must never contain:
+An empty `forbidden_variants` field is valid.
 
-- `PROVISIONAL —` or other status labels
-- recommendations or proposed fixes
-- inferred behaviour
-- implementation suggestions
-- explanations or audit commentary
+### Step 7 — Write `terminology-audit-report.md`
 
-Use `status` to mark a concept as `provisional`. Put the reason in the
-`definition` only when it helps define the concept; otherwise put the
-uncertainty in the audit report.
+Use only these sections.
 
-Examples:
+#### 1. Summary
 
-- Valid: `timezone abbreviation`
-- Valid: `IANA timezone identifier`
-- Invalid: `PROVISIONAL — return both an IANA timezone identifier field and a timezone abbreviation field`
+State:
 
-A provisional term is still a usable canonical label. If no usable label can
-be chosen without inventing behaviour or making a stakeholder decision, mark
-the item as `needs stakeholder input` in the working classification. Do not disguise the unresolved decision as a provisional term.
+- files and authority sources audited;
+- number of `✕` conflicts;
+- number of `△` ambiguities;
+- number of unresolved terminology decisions.
 
-**Before delivering, check whether any concept from Step 3 still carries
-`needs stakeholder input`.** If so, list each unresolved concept and the
-exact decision required. Do not convert unresolved choices into approved or
-provisional terms merely to make the termbase appear complete.
+Do not state or imply that the specification is:
 
-### Step 5 — Write the audit report
+- agent-ready or not agent-ready;
+- safe or unsafe for code generation;
+- complete or incomplete;
+- approved or rejected;
+- ready for `AGENTS.md` or any other workflow.
 
-Produce `terminology-audit-report.md` with these sections:
+Do not rank findings as highest risk, high severity, medium severity, blocking, or critical.
 
-Do not make empirical claims about agent performance or readiness. In particular, do not use phrases such as `agent-ready`, `not agent-ready`, `safe for code generation`, `unsafe for code generation`, or `ready to add to AGENTS.md`. This audit observes terminology evidence only.
+#### 2. Evidence Table
 
-1. **Summary** — report only observed terminology results: counts of behavioral `✕` conflicts, `△` ambiguities, unresolved stakeholder decisions, and the highest-risk evidenced wording issue. Do not label the specification agent-ready, not agent-ready, safe, unsafe, or ready for code generation.
-2. **Inconsistencies found** — a table: Concept | Variants observed |
-   Recommended preferred term | Severity | Locations | Notes. Group by
-   concept. Sort or flag so `behavioral` rows are easy to find first.
-3. **Items needing stakeholder input** — list every unresolved terminology decision and the exact choice required. Include every `✕` conflict for which no authoritative source proves which term should win.
-4. **Evidence-based next steps** — list only direct terminology actions supported by the evidence, such as replacing a variant, defining a term, or asking a stakeholder. Do not recommend deployment, code generation, inclusion in `AGENTS.md`, or any broader readiness decision.
+Include the evidence table from Step 2.
 
-Keep it skimmable — tables over prose. This is a terminology evidence report, not an assessment of implementation quality or code-generation outcomes.
+#### 3. Terminology Findings
 
-For every inconsistency or specification finding, include an evidence block or
-table with:
+Include only `○`, `△`, and `✕` findings. Omit rows where every occurrence is `●` unless needed as contrasting evidence.
 
-| Exact spec text | Location | Interpretation | Why it matters |
-|---|---|---|---|
+Use this table:
 
-Quote only the smallest exact fragment needed. The report must make the path
-from source wording to conclusion visible without requiring the reader to
-reverse-engineer the termbase.
+| Concept | Variants observed | Supported wording | Spec position | Locations |
+| --- | --- | --- | --- | --- |
 
+For unresolved concepts, write `Unresolved` in `Supported wording`.
 
-### Settled Classification Table
+Do not use headings such as `Recommendations`, `Next steps`, `Evidence-based next steps`, or `Action items`.
 
-Include the settled classification table in the audit report using these exact consumer-friendly columns:
+#### 4. Settled Classification Table
+
+Immediately print both legends, then use these exact columns:
 
 | Concept | Wording found in spec | Judgment | Spec position | Wording to use |
 | --- | --- | --- | --- | --- |
 
-Use the columns as follows:
+For unresolved concepts, write `Unresolved` in `Wording to use`.
 
-- `Concept`: the underlying domain concept being discussed.
-- `Wording found in spec`: the exact variant found in the specification.
-- `Judgment`: one of the classification symbols from the legend below.
-- `Spec position`: `behavioral` or `contextual`.
-- `Wording to use`: the approved preferred term.
+Do not use internal labels such as `Variant/card`, `Symbol`, `Severity`, or `Preferred term` as column headings.
 
-Do not use internal analysis labels such as `Variant/card`, `Symbol`, `Severity`, or `Preferred term` as report column headings.
+#### 5. Why the Flagged Wording Matters
 
-Immediately before the table, always print this legend:
-
-| Symbol | Meaning                                                    |
-| ------ | ---------------------------------------------------------- |
-| `●`    | Preferred and unambiguous                                  |
-| `○`    | Correct in context, but not the preferred term             |
-| `△`    | Ambiguous; an agent may need to guess the intended meaning |
-| `✕`    | Conflicting meaning; must be resolved                      |
-
-Also explain the severity values:
-
-| Severity     | Meaning                                                                                   |
-| ------------ | ----------------------------------------------------------------------------------------- |
-| `behavioral` | Appears in normative or executable specification text and may affect generated behavior   |
-| `contextual` | Appears in explanatory or background text and is less likely to affect generated behavior |
-
-Do not output a classification table containing symbols unless both legends are present in the same report.
-
-### Teach the reader why each issue matters
-
-The report must not stop at assigning a symbol. For every `△` or `✕` row, add a short, plain-language explanation immediately after the classification table under a heading such as `## Why the flagged wording matters`.
-
-Use one compact block per flagged wording with these fields:
+For every `△` or `✕`, include one compact teaching block:
 
 | Field | Required content |
 | --- | --- |
-| `What the spec says` | Quote the smallest exact fragment that is being flagged. |
-| `Why this may confuse an agent` | Explain the ambiguity or conflict in ordinary language, without audit jargon. |
-| `What the agent might do differently` | Give one concrete example of two plausible implementations, filters, names, states, or behaviours the agent could choose. |
-| `What evidence supports this` | Point to the exact other wording or definition that creates the ambiguity or conflict. |
-| `What to do next` | State whether to replace a variant, define the term, or ask a stakeholder. |
+| `What the spec says` | The smallest exact flagged fragment |
+| `Possible interpretation A` | One plausible meaning supported by the evidence |
+| `Possible interpretation B` | A different plausible meaning supported by the evidence |
+| `What could differ in implementation` | One concrete naming, filtering, storage, state, API, or behavioural difference |
+| `Evidence` | The exact contrasting wording or authoritative source |
+| `Terminology decision` | The supported wording, or the exact stakeholder choice if unresolved |
 
-Keep each block brief: normally 3-6 sentences plus the quoted wording. Write as if teaching a reader who has never seen a terminology audit before.
+Keep each block brief and plain-language. Teach the reader why the wording matters without making predictions about overall code-generation success.
 
-Do not claim that a phrase is confusing merely because it is unusual. A `△` or `✕` requires a demonstrated alternative interpretation supported by the spec or existing implementation vocabulary. If the report cannot show at least two plausible interpretations, downgrade the item or describe it as a specification-clarity finding instead of a terminology conflict.
+For `○` findings, a teaching block is optional. Include one only when the difference is not obvious.
 
-Do not invent a preferred term that does not already have support in the specification, implementation identifiers, published API vocabulary, or established domain language. If choosing the preferred term would require deciding what the system should mean, place the item in `Items Needing Stakeholder Input`.
+#### 6. Items Needing Stakeholder Input
 
-Example:
+List only unresolved terminology choices.
 
-> **What the spec says:** `stable specs`  
-> **Why this may confuse an agent:** The spec also uses `canonical`, but it does not say whether “stable” and “canonical” identify the same set of files.  
-> **What the agent might do differently:** One implementation might scan all non-draft specs, while another might scan only files explicitly designated as canonical.  
-> **What to do next:** Define the intended file set or ask the owner; do not silently invent `canonical specs` as the answer.
+For each item state:
 
-## How to read the generated artefacts
+- the competing wording;
+- why authority could not be established;
+- the exact naming or meaning decision required.
 
-The generated artefacts must be understandable together, not as isolated
-files.
+Write `None` when every preferred term is supported by audited evidence.
 
-Read them in this order:
+Do not include corrections, recommendations, workflow advice, or implementation suggestions in this section.
 
-1. Start with `terminology-audit-report.md` to understand the issues and see
-   the exact supporting evidence.
-2. Use each finding's source location to inspect the cited wording in the
-   specification.
-3. Open `termbase.csv` to see the settled canonical term that should be used
-   after the issue is understood or resolved.
+#### 7. Scope Limitation
 
-For each termbase row:
+State that the audit covers vocabulary ambiguity only and does not evaluate logical consistency, requirement completeness, technical feasibility, or implementation correctness.
 
-1. Read `source_locations`.
-2. Find those locations in the specification.
-3. Compare the exact wording recorded in the report's evidence table.
-4. Read `definition` and `forbidden_variants`.
-5. Confirm that the preferred term is a reusable label, not a recommendation
-   or an invented requirement.
+## Report quality checks
 
-The relationship between the files is:
+Before delivery, verify all of the following:
 
-```text
-specification wording
-        ↓
-evidence table in the audit report
-        ↓
-concept grouping and classification
-        ↓
-canonical vocabulary in termbase.csv
-```
+- Every `△` shows two plausible interpretations.
+- Every `✕` shows incompatible terminology for one implementation concept.
+- Every selected preferred term has visible authoritative evidence.
+- Every unresolved conflict appears under `Items Needing Stakeholder Input`.
+- No unresolved concept appears in `termbase.csv`.
+- The report and termbase use the same preferred wording.
+- The report contains no readiness, safety, approval, severity-ranking, recommendation, or next-step claims.
+- The report contains no out-of-scope specification findings.
+- A reader can trace every finding from exact wording to classification and authority.
 
-If a reader cannot determine why a preferred term or finding exists by
-following this chain, revise the audit before delivery.
+## Deliver
 
-### Step 6 — Deliver
+Save and return:
 
-Save `termbase.csv` and `terminology-audit-report.md`. If any terminology decisions are unresolved, deliver both and state which concepts require stakeholder input. Do not translate unresolved terminology into a readiness judgment.
+- `termbase.csv`
+- `terminology-audit-report.md`
 
-## Scope limitation, state this explicitly when relevant
-
-This skill catches **vocabulary** ambiguity only. It cannot detect specs
-that are internally *logically* inconsistent while using perfectly
-consistent terminology (e.g., a precondition that contradicts a
-postcondition elsewhere, both worded consistently) — that's a semantic
-review problem, not a terminology problem, and is out of scope here.
+Deliver both even when terminology decisions remain unresolved.
