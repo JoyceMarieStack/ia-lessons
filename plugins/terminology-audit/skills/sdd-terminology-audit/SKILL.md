@@ -73,6 +73,30 @@ referring to one lifecycle action) — these are easy to miss by pattern
 matching and are exactly the kind of drift that produces inconsistent
 method/field naming in generated code.
 
+### Step 2a — Build an evidence table before analysing concepts
+
+Before grouping terms into concepts, build an evidence table that preserves
+the exact wording found in the specification. Use this table as the
+provenance trail for every later conclusion.
+
+| Exact text | Structural position | Source location | Candidate concept |
+|---|---|---|---|
+
+Apply these rules:
+
+- Copy the wording exactly as it appears in the specification.
+- Do not paraphrase or silently normalise the wording at this stage.
+- Do not infer missing behaviour or invent a proposed requirement.
+- Record repeated occurrences separately when they appear in different
+  structural positions or sources.
+- Give each source location enough precision for a reader to find the text
+  directly, such as file, heading, requirement ID, scenario ID, or line range.
+- Ensure every term, variant, definition, and finding in the final outputs is
+  traceable to one or more rows in this evidence table.
+
+Keep this table as working analysis. Include its relevant evidence in the
+audit report so a reader can reconstruct why each conclusion was reached.
+
 ### Step 3 — Concept-oriented analysis, spec-first authority
 
 For each distinct concept, work out:
@@ -128,6 +152,31 @@ Out of everything classified `✕` with `behavioral` severity, identify
 the one that would cause the worst generation error if an agent picked
 the wrong meaning — lead the report's summary with this.
 
+### Keep terminology decisions separate from specification findings
+
+Do not mix controlled-vocabulary decisions with specification-quality
+findings.
+
+A terminology decision answers:
+
+> What should this concept be called?
+
+A specification finding answers:
+
+> Is the behaviour involving this concept sufficiently and consistently
+> specified?
+
+Missing requirements, implied behaviour, conflicting acceptance criteria,
+and underspecified inputs or outputs belong in the audit report. They are not
+terms and must not become termbase rows unless the specification contains an
+actual vocabulary concept that needs a canonical label.
+
+Do not turn a proposed fix into a preferred term. For example, if the spec is
+unclear whether a response returns an IANA identifier, an abbreviation, or
+both, report that uncertainty as a specification finding. Do not create a
+preferred term such as `return both an IANA timezone identifier field and a
+timezone abbreviation field`.
+
 ### Step 4 — Build the termbase, with a stricter completion bar
 
 Produce a CSV at `termbase.csv` (write it directly) with these columns:
@@ -145,6 +194,34 @@ Produce a CSV at `termbase.csv` (write it directly) with these columns:
 | `source_locations` | file(s)/section(s) where this concept appears |
 
 Quote any field containing a comma so the CSV stays well-formed.
+
+#### Preferred term rules
+
+The `preferred_term` field must contain only the canonical label for a
+concept. It must be a term a writer or coding agent can actually use.
+
+It must never contain:
+
+- `PROVISIONAL —` or other status labels
+- recommendations or proposed fixes
+- inferred behaviour
+- implementation suggestions
+- explanations or audit commentary
+
+Use `status` to mark a concept as `provisional`. Put the reason in the
+`definition` only when it helps define the concept; otherwise put the
+uncertainty in the audit report.
+
+Examples:
+
+- Valid: `timezone abbreviation`
+- Valid: `IANA timezone identifier`
+- Invalid: `PROVISIONAL — return both an IANA timezone identifier field and a timezone abbreviation field`
+
+A provisional term is still a usable canonical label. If no usable label can
+be chosen without inventing behaviour or making a stakeholder decision, mark
+the item as `needs stakeholder input` in the working classification and treat
+it as blocking. Do not disguise the unresolved decision as a provisional term.
 
 **Before delivering, check: does any concept from Step 3 still carry
 `needs stakeholder input`?** If so, this termbase is not ready to hand
@@ -180,6 +257,54 @@ Produce `terminology-audit-report.md` with these sections:
 
 Keep it skimmable — tables over prose. This is a working document for an
 engineering team about to run code generation, not a formal deliverable.
+
+For every inconsistency or specification finding, include an evidence block or
+table with:
+
+| Exact spec text | Location | Interpretation | Why it matters |
+|---|---|---|---|
+
+Quote only the smallest exact fragment needed. The report must make the path
+from source wording to conclusion visible without requiring the reader to
+reverse-engineer the termbase.
+
+## How to read the generated artefacts
+
+The generated artefacts must be understandable together, not as isolated
+files.
+
+Read them in this order:
+
+1. Start with `terminology-audit-report.md` to understand the issues and see
+   the exact supporting evidence.
+2. Use each finding's source location to inspect the cited wording in the
+   specification.
+3. Open `termbase.csv` to see the settled canonical term that should be used
+   after the issue is understood or resolved.
+
+For each termbase row:
+
+1. Read `source_locations`.
+2. Find those locations in the specification.
+3. Compare the exact wording recorded in the report's evidence table.
+4. Read `definition` and `forbidden_variants`.
+5. Confirm that the preferred term is a reusable label, not a recommendation
+   or an invented requirement.
+
+The relationship between the files is:
+
+```text
+specification wording
+        ↓
+evidence table in the audit report
+        ↓
+concept grouping and classification
+        ↓
+canonical vocabulary in termbase.csv
+```
+
+If a reader cannot determine why a preferred term or finding exists by
+following this chain, revise the audit before delivery.
 
 ### Step 6 — Deliver
 
