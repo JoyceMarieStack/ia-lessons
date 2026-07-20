@@ -276,7 +276,20 @@ reverse-engineer the termbase.
 
 ### Settled Classification Table
 
-Include the settled classification table in the audit report.
+Include the settled classification table in the audit report using these exact consumer-friendly columns:
+
+| Concept | Wording found in spec | Judgment | Spec position | Wording to use |
+| --- | --- | --- | --- | --- |
+
+Use the columns as follows:
+
+- `Concept`: the underlying domain concept being discussed.
+- `Wording found in spec`: the exact variant found in the specification.
+- `Judgment`: one of the classification symbols from the legend below.
+- `Spec position`: `behavioral` or `contextual`.
+- `Wording to use`: the approved preferred term.
+
+Do not use internal analysis labels such as `Variant/card`, `Symbol`, `Severity`, or `Preferred term` as report column headings.
 
 Immediately before the table, always print this legend:
 
