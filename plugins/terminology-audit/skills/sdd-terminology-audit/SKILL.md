@@ -309,7 +309,32 @@ Also explain the severity values:
 
 Do not output a classification table containing symbols unless both legends are present in the same report.
 
+### Teach the reader why each issue matters
 
+The report must not stop at assigning a symbol. For every `△` or `✕` row, add a short, plain-language explanation immediately after the classification table under a heading such as `## Why the flagged wording matters`.
+
+Use one compact block per flagged wording with these fields:
+
+| Field | Required content |
+| --- | --- |
+| `What the spec says` | Quote the smallest exact fragment that is being flagged. |
+| `Why this may confuse an agent` | Explain the ambiguity or conflict in ordinary language, without audit jargon. |
+| `What the agent might do differently` | Give one concrete example of two plausible implementations, filters, names, states, or behaviours the agent could choose. |
+| `What evidence supports this` | Point to the exact other wording or definition that creates the ambiguity or conflict. |
+| `What to do next` | State whether to replace a variant, define the term, or ask a stakeholder. |
+
+Keep each block brief: normally 3-6 sentences plus the quoted wording. Write as if teaching a reader who has never seen a terminology audit before.
+
+Do not claim that a phrase is confusing merely because it is unusual. A `△` or `✕` requires a demonstrated alternative interpretation supported by the spec or existing implementation vocabulary. If the report cannot show at least two plausible interpretations, downgrade the item or describe it as a specification-clarity finding instead of a terminology conflict.
+
+Do not invent a preferred term that does not already have support in the specification, implementation identifiers, published API vocabulary, or established domain language. If choosing the preferred term would require deciding what the system should mean, place the item in `Items Needing Stakeholder Input`.
+
+Example:
+
+> **What the spec says:** `stable specs`  
+> **Why this may confuse an agent:** The spec also uses `canonical`, but it does not say whether “stable” and “canonical” identify the same set of files.  
+> **What the agent might do differently:** One implementation might scan all non-draft specs, while another might scan only files explicitly designated as canonical.  
+> **What to do next:** Define the intended file set or ask the owner; do not silently invent `canonical specs` as the answer.
 
 ## How to read the generated artefacts
 
