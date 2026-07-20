@@ -7,7 +7,7 @@
     {
       "name": "terminology-audit",
       "source": "./plugins/terminology-audit",
-      "description": "Audit technical/engineering docs for inconsistent terminology and produce a termbase and a written audit report."
+      "description": "Audit technical/engineering docs or spec-driven-development (SDD) spec files for inconsistent terminology and produce a termbase and a written audit report."
     }
   ]
 }

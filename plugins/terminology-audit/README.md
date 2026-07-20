@@ -1,23 +1,30 @@
 # terminology-audit
 
-A Claude Code skill that audits technical/engineering docs for inconsistent
-terminology and produces two deliverables:
+A Claude Code plugin with two skills that audit terminology and produce a
+termbase + a written audit report:
 
-1. **Termbase** — a structured glossary of preferred terms (definition,
-   part of speech, usage context, forbidden variants), formatted close to
-   what TMS/CAT localization tools expect.
-2. **Audit report** — a written summary of what's inconsistent, why it
-   matters, and what to do about it, including which conflict matters most
-   and which source uses terms most precisely.
+1. **[terminology-audit](skills/terminology-audit/SKILL.md)** — for human-
+   facing technical/engineering docs (READMEs, API references, guides).
+   Produces a **termbase** (structured glossary of preferred terms —
+   definition, part of speech, usage context, forbidden variants —
+   formatted close to what TMS/CAT localization tools expect) and an
+   **audit report** (what's inconsistent, why it matters, which conflict
+   matters most, which source is most precise).
+2. **[sdd-terminology-audit](skills/sdd-terminology-audit/SKILL.md)** — for
+   spec-driven-development (SDD) spec files that get handed to an AI
+   coding agent as a prompt. Same two deliverables, but weighted toward
+   structural spec elements (Given/When/Then, MUST/SHALL, interface
+   names) and held to a stricter bar: the termbase must have zero
+   unresolved rows before it's agent-ready.
 
-No bundled scripts or tooling — every deliverable is written directly by
-the agent, so the skill runs the same regardless of which agent or
-environment is running it.
+No bundled scripts or tooling in either skill — every deliverable is
+written directly by the agent, so both run the same regardless of which
+agent or environment is running them.
 
-See [`skills/terminology-audit/SKILL.md`](skills/terminology-audit/SKILL.md)
-for the full workflow the skill follows, and
-[`../../examples`](../../examples) in this repo for a worked example
-(NASA solar-system docs + an Argo CD docs run) with real output.
+See each skill's `SKILL.md` for its full workflow, and
+[`../../examples`](../../examples) in this repo for worked examples
+(NASA solar-system docs + an Argo CD docs run for `terminology-audit`;
+a spec-kit-generated feature spec for `sdd-terminology-audit`).
 
 ## Install
 
@@ -33,6 +40,8 @@ terminology-audit/
 ├── .claude-plugin/
 │   └── plugin.json
 └── skills/
-    └── terminology-audit/
+    ├── terminology-audit/
+    │   └── SKILL.md
+    └── sdd-terminology-audit/
         └── SKILL.md
 ```
