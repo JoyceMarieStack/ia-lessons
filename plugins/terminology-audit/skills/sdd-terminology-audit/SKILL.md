@@ -96,6 +96,32 @@ Before calling something ambiguous, write down at least two plausible interpreta
 
 If two plausible interpretations cannot be shown, do not classify the wording as `△` or `✕`.
 
+#### Finding threshold
+
+Only include a terminology finding when all of these are true:
+
+1. You can quote the exact sentence or fragment the developer must clarify.
+2. You can show at least two plausible interpretations of that wording, or two incompatible terms for the same implementation concept.
+3. You can describe one concrete implementation difference those interpretations could cause.
+4. The difference is material to naming, filtering, storage, states, APIs, commands, events, errors, or another implementation-facing concept.
+5. The finding is not merely a style preference, harmless shorthand, grammatical variation, or wording that is already made clear by nearby context.
+
+Do not report a finding when:
+
+- adding or removing a word does not change any plausible implementation outcome;
+- the surrounding sentence already resolves the meaning;
+- the only difference is capitalization, hyphenation, singular/plural grammar, or expanded versus abbreviated form and no separate identifier family is likely;
+- the interpretation requires inventing facts not present in the audited evidence;
+- the issue is really missing behaviour, execution order, optionality, completeness, or implementation detail.
+
+When authority sources also use the competing variants inconsistently, do not choose a winner. Report the undefined relationship between the terms and mark the decision unresolved.
+
+Apply this success test to every proposed finding:
+
+> Would a developer reading the report know exactly which sentence to clarify and why?
+
+If the answer is no, omit the finding.
+
 ### Step 4 — Apply authority carefully
 
 Use this authority order only when the relevant source is inside the declared audit scope:
@@ -196,7 +222,9 @@ Include the evidence table from Step 2.
 
 #### 3. Terminology Findings
 
-Include only `○`, `△`, and `✕` findings. Omit rows where every occurrence is `●` unless needed as contrasting evidence.
+Include only `△` and `✕` findings that pass the Finding threshold. Do not list harmless `○` variations as findings. A `○` may appear only in the Settled Classification Table as supporting context.
+
+Omit rows where every occurrence is `●` or `○`.
 
 Use this table:
 
@@ -257,8 +285,13 @@ State that the audit covers vocabulary ambiguity only and does not evaluate logi
 
 Before delivery, verify all of the following:
 
-- Every `△` shows two plausible interpretations.
-- Every `✕` shows incompatible terminology for one implementation concept.
+- Every reported finding identifies the exact sentence or fragment a developer must clarify.
+- Every reported finding explains why clarification is needed in plain language.
+- Every `△` shows two plausible interpretations supported by audited evidence.
+- Every `✕` shows incompatible terminology for one implementation concept and a concrete implementation difference.
+- Harmless shorthand, grammatical variants, and nearby-context-resolved wording are omitted.
+- If authority sources use competing variants inconsistently, the report does not invent a winner.
+- The success test passes for every finding: a developer can identify exactly which sentence to clarify and why.
 - Every selected preferred term has visible authoritative evidence.
 - Every unresolved conflict appears under `Items Needing Stakeholder Input`.
 - No unresolved concept appears in `termbase.csv`.
