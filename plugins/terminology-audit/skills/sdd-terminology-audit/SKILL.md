@@ -1,6 +1,6 @@
 ---
 name: sdd-terminology-audit
-description: Audit spec-driven development (SDD) specification files — specs used as prompts for AI coding agents — for vocabulary ambiguity that could cause an agent to silently misinterpret intent during code generation. Produces (1) a machine-ready termbase with zero unresolved terms, meant for AGENTS.md or agent context as a ubiquitous-language constraint, and (2) an audit report distinguishing spec-critical conflicts from cosmetic ones. Plain markdown/CSV output, no code execution, so results are portable to whatever tool consumes the spec (Claude Code, Cursor, GitHub Spec-Kit, Kiro, etc.). Use when the user asks to audit terminology in specs, requirement specifications, SDD specs, Given/When/Then scenarios, or files meant to be handed to an AI coding agent — not human docs (use the separate terminology-audit skill for that). Trigger on "audit my specs," "check terminology before I generate code," or cues like Given/When/Then, MUST/SHALL, interface contracts.
+description: Audit spec-driven development (SDD) specification files — specs used as prompts for AI coding agents — for vocabulary ambiguity that could cause an agent to silently misinterpret intent during code generation. Produces (1) a termbase recording settled and unresolved terminology decisions and (2) an audit report distinguishing behavioral conflicts from contextual wording differences. Plain markdown/CSV output, no code execution, so results are portable to whatever tool consumes the spec (Claude Code, Cursor, GitHub Spec-Kit, Kiro, etc.). Use when the user asks to audit terminology in specs, requirement specifications, SDD specs, Given/When/Then scenarios, or files meant to be handed to an AI coding agent — not human docs (use the separate terminology-audit skill for that). Trigger on "audit my specs," "check terminology before I generate code," or cues like Given/When/Then, MUST/SHALL, interface contracts.
 ---
 
 # SDD Terminology Audit
@@ -135,7 +135,7 @@ authoritative:
 - do not mark either term as approved;
 - mark the concept as `needs stakeholder input`;
 - state the exact decision the stakeholder must make;
-- treat the specification as not agent-ready.
+- record the conflict as unresolved and require stakeholder input before selecting a preferred term.
 
 A terminology mismatch proves that a decision is needed. It does not prove
 which term should win.
@@ -148,8 +148,7 @@ which term should win.
    - Prefer full/expanded forms as canonical, with abbreviations noted
      as accepted shorthand after first use.
    - When usage is a genuine toss-up, don't force a decision — mark it
-     `needs stakeholder input` (this must be resolved before Step 4
-     completes — see below).
+     `needs stakeholder input` and leave the preferred term unresolved.
 4. **A classification for every term+source pair** ("card"), using the
    same four-way scheme as the documentation skill:
 
@@ -253,44 +252,27 @@ Examples:
 
 A provisional term is still a usable canonical label. If no usable label can
 be chosen without inventing behaviour or making a stakeholder decision, mark
-the item as `needs stakeholder input` in the working classification and treat
-it as blocking. Do not disguise the unresolved decision as a provisional term.
+the item as `needs stakeholder input` in the working classification. Do not disguise the unresolved decision as a provisional term.
 
-**Before delivering, check: does any concept from Step 3 still carry
-`needs stakeholder input`?** If so, this termbase is not ready to hand
-to a coding agent. Say so explicitly — list the unresolved terms and
-what decision is needed — rather than delivering a termbase with open
-questions baked silently into it. A human must resolve these before the
-spec (and this termbase) goes to code generation. This is the one hard
-rule that's stricter than the documentation skill: there, an unresolved
-row is fine, since a human reader can hold ambiguity in mind. An agent
-generating code cannot.
-
-Once every row is `approved` or `provisional`, note in the deliverable
-that this termbase is ready to be included in `AGENTS.md` or equivalent
-agent-context configuration as a ubiquitous-language constraint.
+**Before delivering, check whether any concept from Step 3 still carries
+`needs stakeholder input`.** If so, list each unresolved concept and the
+exact decision required. Do not convert unresolved choices into approved or
+provisional terms merely to make the termbase appear complete.
 
 ### Step 5 — Write the audit report
 
 Produce `terminology-audit-report.md` with these sections:
 
-1. **Summary** — lead with whether the spec set is agent-ready, i.e.
-   whether any `behavioral` `✕` conflicts or unresolved stakeholder
-   items remain. State this before file counts or general scope.
+Do not make empirical claims about agent performance or readiness. In particular, do not use phrases such as `agent-ready`, `not agent-ready`, `safe for code generation`, `unsafe for code generation`, or `ready to add to AGENTS.md`. This audit observes terminology evidence only.
+
+1. **Summary** — report only observed terminology results: counts of behavioral `✕` conflicts, `△` ambiguities, unresolved stakeholder decisions, and the highest-risk evidenced wording issue. Do not label the specification agent-ready, not agent-ready, safe, unsafe, or ready for code generation.
 2. **Inconsistencies found** — a table: Concept | Variants observed |
    Recommended preferred term | Severity | Locations | Notes. Group by
    concept. Sort or flag so `behavioral` rows are easy to find first.
-3. **Items needing stakeholder input** — treat this as a blocking
-   checklist, not optional reading, since Step 4 means these must be
-   resolved before generation. Include every `✕` conflict for which no
-   authoritative source proves which term should win.
-4. **Recommendations** — concrete next steps; where the termbase is
-   fully resolved, explicitly recommend adding it to `AGENTS.md` or
-   equivalent, so the audit closes the loop into the SDD workflow rather
-   than sitting as a standalone report.
+3. **Items needing stakeholder input** — list every unresolved terminology decision and the exact choice required. Include every `✕` conflict for which no authoritative source proves which term should win.
+4. **Evidence-based next steps** — list only direct terminology actions supported by the evidence, such as replacing a variant, defining a term, or asking a stakeholder. Do not recommend deployment, code generation, inclusion in `AGENTS.md`, or any broader readiness decision.
 
-Keep it skimmable — tables over prose. This is a working document for an
-engineering team about to run code generation, not a formal deliverable.
+Keep it skimmable — tables over prose. This is a terminology evidence report, not an assessment of implementation quality or code-generation outcomes.
 
 For every inconsistency or specification finding, include an evidence block or
 table with:
@@ -405,10 +387,7 @@ following this chain, revise the audit before delivery.
 
 ### Step 6 — Deliver
 
-Save `termbase.csv` and `terminology-audit-report.md`. If any termbase
-rows are unresolved, deliver both anyway but say clearly, before
-anything else, that the spec set is not yet ready for code generation
-and why.
+Save `termbase.csv` and `terminology-audit-report.md`. If any terminology decisions are unresolved, deliver both and state which concepts require stakeholder input. Do not translate unresolved terminology into a readiness judgment.
 
 ## Scope limitation, state this explicitly when relevant
 
