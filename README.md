@@ -1,16 +1,36 @@
-ia-lessons/
-├── README.md                          # ties the lessons together, explains the series
-├── lesson-01-spec-and-plan/
-│   ├── README.md                      # the lesson itself: prompt + walkthrough
-│   ├── spec.md                        # the written spec for stem-and-leaf content
-│   └── plan.md                        # Claude's approved plan (captured as an artifact)
-├── lesson-02-writing-a-skill/
-│   ├── README.md
-│   ├── SKILL.md                       # the actual stem-and-leaf skill
-│   └── examples/                      # sample data sets + expected diagrams
-│       ├── data-01.csv
-│       └── data-01-expected.txt
-└── lesson-03-review-workflow/
-    ├── README.md
-    ├── reviewer-subagent.md           # subagent definition
-    └── checklist.md                   # what it checks for
+# ia-lessons
+
+A Claude Code plugin marketplace repo. Currently distributes one plugin:
+
+## Plugins
+
+- **[terminology-audit](plugins/terminology-audit/)** — audits technical/
+  engineering docs for inconsistent terminology and produces a termbase,
+  a stem-and-leaf diagram of term drift, and a written audit report.
+
+## Install
+
+```
+/plugin marketplace add JoyceMarieStack/ia-lessons
+/plugin install terminology-audit
+```
+
+## Examples
+
+[`examples/`](examples/) has a worked walkthrough of the skill — sample
+source docs, real generated output, and notes tying the results back to
+information-architecture concepts (controlled vocabulary, synonymy vs.
+polysemy, etc.) and to spec-driven-development workflows.
+
+## Repo layout
+
+```
+.claude-plugin/
+  marketplace.json          # lists the plugins this repo distributes
+plugins/
+  terminology-audit/        # the plugin itself
+examples/
+  README.md                 # walkthrough notes
+  sample-dataset/           # source docs used in the walkthrough
+  sample-reports/           # generated termbase/diagram/report output
+```
