@@ -152,6 +152,11 @@ Out of everything classified `✕` with `behavioral` severity, identify
 the one that would cause the worst generation error if an agent picked
 the wrong meaning — lead the report's summary with this.
 
+
+
+
+
+
 ### Keep terminology decisions separate from specification findings
 
 Do not mix controlled-vocabulary decisions with specification-quality
@@ -267,6 +272,31 @@ table with:
 Quote only the smallest exact fragment needed. The report must make the path
 from source wording to conclusion visible without requiring the reader to
 reverse-engineer the termbase.
+
+
+### Settled Classification Table
+
+Include the settled classification table in the audit report.
+
+Immediately before the table, always print this legend:
+
+| Symbol | Meaning                                                    |
+| ------ | ---------------------------------------------------------- |
+| `●`    | Preferred and unambiguous                                  |
+| `○`    | Correct in context, but not the preferred term             |
+| `△`    | Ambiguous; an agent may need to guess the intended meaning |
+| `✕`    | Conflicting meaning; must be resolved                      |
+
+Also explain the severity values:
+
+| Severity     | Meaning                                                                                   |
+| ------------ | ----------------------------------------------------------------------------------------- |
+| `behavioral` | Appears in normative or executable specification text and may affect generated behavior   |
+| `contextual` | Appears in explanatory or background text and is less likely to affect generated behavior |
+
+Do not output a classification table containing symbols unless both legends are present in the same report.
+
+
 
 ## How to read the generated artefacts
 
