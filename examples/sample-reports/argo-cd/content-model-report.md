@@ -1,71 +1,64 @@
-# Content Model Report: Argo CD Docs
+# Content Model Report — Argo CD Docs
 
-Corpus root: `argo-cd/docs`
+## Summary
 
-## 1. Summary
+Four content types emerge from the corpus: two large auto-generated CLI
+reference groups, one folder of frontmatter-driven design proposals, and a
+broad conceptual/how-to bucket covering the rest. The CLI reference and
+proposal types are internally very consistent (heading and frontmatter
+patterns repeat 80–100% of the time); the conceptual/how-to bucket is the
+least consistent, as expected for a group this size and origin.
 
-Nine groupings were profiled (folder-based, since only one corner of the corpus uses explicit type metadata) covering 424 of 455 Markdown files. The picture is split cleanly in two: three highly mechanical, auto-generated or template-driven types (`proposals`, `cli-command-reference`, `version-upgrade-notes`) have strong, consistent internal structure worth codifying as schema, while the remaining hand-authored guide content (`user-guide`, `operator-manual`, `developer-guide`, root files) shares only an H1 title and freeform prose — no metadata convention at all outside `proposals/`.
-
-## 2. Content types
+## Content types
 
 | Type | File count | Sample files | Common sections |
 |---|---|---|---|
-| Design proposal | 35 | `proposals/002-ui-extensions.md`, `proposals/001-proposal-template.md` | Summary, Motivation, Goals, Non-Goals, Proposal, Use Cases, Security Considerations, Risks and Mitigations, Drawbacks, Upgrade/Downgrade Strategy |
-| CLI command reference | 170 | `user-guide/commands/argocd_app_sync.md`, `user-guide/commands/argocd_app.md` | Command title (H1), one-line description, Synopsis (code block), Examples, Options, Options inherited from parent commands, See Also |
-| Version upgrade notes | 32 | `operator-manual/upgrading/3.5-3.6.md`, `operator-manual/upgrading/2.14-3.0.md` | Breaking Changes, Behavioral Improvements/Fixes, per-change H3 with narrative + **Impact:**/**New behavior:** callouts |
-| ApplicationSet generator docs | 25 | `operator-manual/applicationset/Generators-Git.md`, `Generators.md` | Introduction, one H2 per generator subtype, config example, restrictions/filters |
-| Notification service docs | 22 | `operator-manual/notifications/services/slack.md` | Parameters (table: Option/Required/Type/Description/Example), Configuration (numbered steps + screenshots), Templates |
-| User management guides | 12 | `operator-manual/user-management/index.md` | Overview, provider-specific H2s (Dex, SAML, Keycloak, Zitadel...), Configuring RBAC, References |
-| Operator manual (general) | 45 | `operator-manual/rbac.md`, `operator-manual/health.md` | Overview, Introduction, Prerequisites — otherwise freeform per topic |
-| User guide (general) | 48 | `user-guide/sync-options.md` | Overview, Prerequisites, Examples — otherwise freeform per topic |
-| Developer guide | 32 | `developer-guide/contributing.md` | Preface, Prerequisites, Overview — otherwise freeform per topic |
-| Root-level docs | 13 | `faq.md`, `core_concepts.md`, `getting_started.md` | No shared structure; `faq.md` alone is a flat list of question-headings |
+| CLI command reference | 179 | `user-guide/commands/argocd_app_sync.md`, `operator-manual/server-commands/argocd-dex.md` | Synopsis, Options, Options inherited from parent commands, Examples, See Also |
+| Upgrade guides | 32 | `operator-manual/upgrading/2.8-2.9.md`, `operator-manual/upgrading/1.0-1.1.md` | Breaking changes, upgraded dependency notes (e.g. "Upgraded Helm version"), added healthchecks |
+| Design proposals | 35 | `proposals/001-proposal-template.md`, `proposals/004-scalability-benchmarking.md` | Summary, Motivation, Goals, Non-Goals, Proposal, Risks and Mitigations, Security Considerations |
+| Conceptual / how-to guides | 210 | `user-guide/application-set.md`, `operator-manual/rbac.md`, `developer-guide/ci.md` | Overview, Prerequisites, Configuration, Examples — present inconsistently, no fixed set |
 
-The last four rows share one real pattern (H1 title + optional Overview/Prerequisites) but are otherwise topic-driven prose with no consistent skeleton — they're grouped by folder location for inventory purposes, not because they're a structurally distinct type.
+CLI reference is a fallback-folder grouping confirmed by heading pattern
+(`user-guide/commands/` — 170 files — and `operator-manual/server-commands/`
+— 9 files — both follow the same auto-generated `--help`-derived structure).
+Upgrade guides is likewise folder-based (`operator-manual/upgrading/`),
+named by version pair rather than topic. The conceptual/how-to bucket is
+everything not captured by the other three — it spans `user-guide/`
+top-level, most of `operator-manual/` (including `applicationset/`,
+`notifications/`, `user-management/`), all of `developer-guide/`, and the
+repo-root loose files.
 
-## 3. Recommended schema per type
+## Recommended schema per type
 
-| Type | Field | Required/Optional | Observed in | Notes |
+| Field | Required/Optional | Observed in (%) | Notes |
+|---|---|---|---|
+| **Design proposals** `title` | Required | 91% (32/35) | De facto required |
+| **Design proposals** `authors` | Required | 91% (32/35) | De facto required |
+| **Design proposals** `creation-date` | Required | 91% (32/35) | De facto required |
+| **Design proposals** `reviewers`/`approvers`/`sponsors` | Recommended | 83% (29/35) | Present in most but not all |
+| **Design proposals** `last-updated` | Recommended | 69% (24/35) | Meaningful minority |
+| **Design proposals** `status` | Not currently used | 0% (0/35) | See Missing metadata below |
+| **CLI reference** frontmatter | N/A | 0% | Auto-generated from CLI `--help`; structure lives in headings, not frontmatter |
+| **Upgrade guides** frontmatter | N/A | 0% | Structure lives in headings, not frontmatter |
+| **Conceptual/how-to** frontmatter | N/A | ~0% | No consistent frontmatter observed in sample |
+
+## Missing metadata
+
+| Type | Bucket (governance/reference) | Field | Present in (%) | Verdict |
 |---|---|---|---|---|
-| Design proposal | `title` | Required | 32/35 (91%) | Missing only in template/meta files |
-| Design proposal | `authors` | Required | 32/35 (91%) | List of GitHub handles |
-| Design proposal | `creation-date` | Required | 32/35 (91%) | |
-| Design proposal | `sponsors` | Recommended | 29/35 (83%) | Borderline required; `TBD` used as placeholder in several |
-| Design proposal | `reviewers` | Recommended | 29/35 (83%) | Same `TBD` pattern |
-| Design proposal | `approvers` | Recommended | 29/35 (83%) | Same `TBD` pattern |
-| Design proposal | `last-updated` | Optional | 24/35 (69%) | Often stale relative to file's last commit |
-| CLI command reference | H1 command title | Required | 170/170 (100%) | Autogenerated, always `` `argocd ...` Command Reference `` |
-| CLI command reference | Synopsis code block | Recommended | 22/170 (13%)* | *Low count is a template quirk — most commands fold synopsis into the description line instead of a separate heading |
-| CLI command reference | Options | Required | 170/170 (100%) | |
-| CLI command reference | Options inherited from parent commands | Required | 169/170 (99%) | |
-| CLI command reference | See Also | Required | 170/170 (100%) | |
-| CLI command reference | Examples | Recommended | 132/170 (78%) | Absent mainly on parent/grouping commands with no direct invocation |
-| Version upgrade notes | Breaking Changes (H2) | Recommended | 8/32 (25%)** | **Only present when that release actually had breaking changes — a content-driven, not schema, gap |
-| Version upgrade notes | Behavioral Improvements/Fixes (H2) | Recommended | 8/32 (25%) | Same caveat as above |
-| Notification service | Parameters table | Required | 17/22 (77%) | Column set (`Option/Required/Type/Description/Example`) is consistent where present |
-| Notification service | Configuration | Recommended | 11/22 (50%) | |
-| Notification service | Templates | Recommended | 8/22 (36%) | |
+| Design proposals | Governance | `status` | 0% (0/35) | Gap — proposals track motivation and risk in detail but have no field marking draft/accepted/implemented/superseded |
+| Design proposals | Governance | `last-updated` | 69% (24/35) | Gap (partial) — worth pushing toward required given the type already treats currency as important |
+| CLI command reference | Reference | owner/status/review-date | 0% | N/A — currency is tied to the CLI itself; git history covers it |
+| Upgrade guides | Reference | owner/status/review-date | 0% | N/A — tied to release cadence, not independently governed |
+| Conceptual/how-to guides | Reference | owner/status/review-date | 0% | N/A — tied to the feature/process it documents |
 
-## 4. Missing metadata
+## Validation rules
 
-| Field | Present in (%) | Types most affected |
-|---|---|---|
-| `owner` / `steward` | 0% | All types |
-| `status` (doc lifecycle, not proposal content) | 0%† | All types |
-| `review_date` / `last_reviewed` | 0% | All types |
-| Stable `id` | 0% (proposals use filename-number prefix informally, e.g. `002-`) | All except proposals |
-| Any frontmatter at all | 32/455 (7%) | Everything outside `proposals/` |
+- Every `proposals/*.md` file should have `title`, `authors`, and `creation-date` in frontmatter.
+- Every `proposals/*.md` file should declare a `status` field (currently absent corpus-wide) with a value such as {draft, implementable, implemented, deferred, rejected, withdrawn, replaced}.
+- Every file under `user-guide/commands/` and `operator-manual/server-commands/` should include an `## Options` heading — its near-universal presence (170/179) suggests deviation indicates an incomplete auto-generation pass.
+- Every file under `operator-manual/upgrading/` should be named `<from>-<to>.md` matching the version-pair pattern already in universal use.
 
-†4 files matched a raw `status:` grep, but all four are embedded Kubernetes YAML snippets in the body text, not document metadata — true governance-field coverage is effectively 0%.
+## Unclassified content
 
-## 5. Validation rules
-
-- Every file in `proposals/` should carry `title`, `authors`, and `creation-date` in frontmatter — these are already de facto universal.
-- `sponsors`, `reviewers`, and `approvers` should be present but may legitimately hold `TBD` pending assignment — don't require non-placeholder values.
-- Every file in `user-guide/commands/` must have `Options`, `Options inherited from parent commands`, and `See Also` sections — these are 99–100% consistent and any exception signals a broken generator run.
-- Notification service docs under `operator-manual/notifications/services/` should use the five-column `Option | Required | Type | Description | Example` table for `Parameters` — don't invent new column names per service.
-- No validation rule should require frontmatter outside `proposals/` — the rest of the corpus has no such convention to enforce, and inventing one now would contradict 93% of the corpus as-is.
-
-## 6. Unclassified content
-
-Roughly 31 of 455 files (7%) — mostly deeper `operator-manual` subfolders not separately profiled here (e.g. `high_availability.md`, `metrics.md`, individual `snyk/` and asset-adjacent files) — weren't assigned to a named type. These read as one-off topic pages rather than a hidden recurring pattern, so folding them into "operator-manual (general)" is reasonable rather than inventing further sub-types.
+A handful of files didn't cleanly fit any type above — mainly short stub or redirect pages (e.g. a moved-page notice found during corpus discovery) and `operator-manual/templates/` (1 file), too thin to profile as its own group. These are folded into the conceptual/how-to bucket rather than given a dedicated type.

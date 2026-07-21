@@ -136,6 +136,18 @@ Classify at the term level, not per individual source/file, unless a
 specific conflict is genuinely source-specific — in which case name the
 sources, don't just say "conflicting."
 
+**Ruled-out false positives don't get a symbol.** If a Step 2 candidate
+turns out, on inspection, to never have been a real variant at all — a
+regex artifact like "side apply" matching inside both "client-side
+apply" and "server-side apply," two genuinely unrelated K8s concepts —
+that's not a `✕` conflict or any other classification. It was never a
+real candidate. Don't give it a row in the Canonical terms table at
+all; if it's worth recording that you checked and ruled it out, say so
+in one line in the Summary or Cross-cutting observations, not as an
+entry in the classification scheme. A reader skimming only the table
+should never see a symbol next to something that turned out to be
+nothing.
+
 **Taxonomy/facet drift**: for each near-duplicate tag cluster from
 Step 3, decide the canonical value. Separately check whether the facet
 *field names themselves* are used consistently — some docs using `tags`
@@ -229,7 +241,8 @@ constraints:
    these should be a table, not prose:
    - Canonical terms — table: `Term | Classification | Status | Notes`
      (classification is the `●`/`○`/`△`/`✕` symbol from Step 4; status
-     is approved/needs stakeholder input/provisional)
+     is approved/needs stakeholder input/provisional). Ruled-out false
+     positives don't belong in this table — see Step 4.
    - Synonyms — can combine with Canonical terms into one table if that
      avoids repeating the same term list twice
    - Preferred spellings — table: `Preferred | Rejected forms`

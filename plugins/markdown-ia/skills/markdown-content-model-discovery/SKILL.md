@@ -4,7 +4,10 @@ description: >
   Infer the implicit content model (document types, common sections,
   metadata fields) of a Markdown documentation corpus without needing a
   predefined schema. Produces recommended content types, a schema per
-  type (required vs. optional metadata), and validation rules. Use
+  type (required vs. optional metadata), and validation rules — with
+  missing-metadata findings calibrated by document type (governance
+  artifacts like standards/policies/ADRs held to a real bar; reference
+  content like CLI docs or how-tos not penalized for lacking it). Use
   whenever the user asks "what's our content model," "what metadata
   should our docs have," "what fields are missing," wants a schema
   proposed for existing Markdown docs, is standardizing frontmatter/
@@ -121,20 +124,48 @@ If folder-fallback group names don't look like real content types (e.g.
 consistent type-tagging convention in use, not that you should invent a
 taxonomy to fill the gap.
 
-## Step 5 — Identify missing governance metadata
+## Step 5 — Identify missing governance metadata (type-aware)
 
-Check presence of governance-relevant fields across the whole corpus,
-not just per group — these are usually the most actionable finding:
+Absence of owner/status/review-date metadata isn't a uniform finding —
+whether it's a real gap depends on what kind of document is missing it.
+Before flagging anything, classify each type from Step 2 into one of
+two buckets:
+
+- **Governance artifact**: a document whose validity or currency needs
+  independent tracking — it can go stale, get superseded, or need
+  re-approval on its own schedule. Standards, policies, ADRs/decision
+  records, and compliance/security docs are the common cases. These
+  types should be held to a real bar: missing owner/status/review-date
+  is a genuine gap, worth flagging prominently.
+- **Reference/informational content**: a document whose currency is
+  tied to something else that already tracks it — a CLI reference tied
+  to software releases (git history covers "is this current"), a
+  how-to guide tied to a process, a FAQ. These types don't need their
+  own owner/status/review-date field to stay governable — flag the
+  absence as **N/A**, not as a gap.
+
+Make this call from what you actually read in Step 3, not from the
+type's name alone — a folder called `guides/` could still hold policy
+content, and a folder called `standards/` could hold a mix. When it's
+genuinely ambiguous which bucket a type belongs in, say so rather than
+guessing, and default to N/A rather than inflating the gap count —
+false "missing metadata" alarms on reference content erode trust in the
+governance-artifact findings that actually matter.
+
+Once types are bucketed, check presence of governance-relevant fields
+across governance-artifact types specifically (not the whole corpus
+uniformly):
 
 ```bash
 grep -rlE '^(owner|steward|status|review_date|last_reviewed|id):' <root> --include='*.md' | wc -l
 find <root> -name '*.md' -not -path '*/.git/*' | wc -l
 ```
 
-Compare the two counts, and break down by group where useful. Call out
-which of owner, status, review cadence, and stable identifier are
-largely absent per type — this feeds directly into governance and
-retrieval-readiness work if the user does that later.
+Run this across the whole corpus for context (how prevalent is any
+metadata at all), but report the gap finding per type, split by bucket
+— a governance-artifact type at 10% coverage is a real problem; a
+reference type at 10% coverage is expected and not worth alarming
+about.
 
 ## Step 6 — Write the content model documentation
 
@@ -166,8 +197,11 @@ on, not a fully-hedged verdict. Two concrete constraints:
    fallback grouping worth explaining)
 3. **Recommended schema per type** — table: `Field | Required/Optional |
    Observed in (%) | Notes`
-4. **Missing metadata** — table: `Field | Present in (%) | Types most
-   affected`
+4. **Missing metadata** — table: `Type | Bucket (governance/reference) |
+   Field | Present in (%) | Verdict (gap / N/A)`. Governance-artifact
+   types with low presence get "gap"; reference types get "N/A" even
+   at 0% — don't collapse the two into one undifferentiated table the
+   way a flat corpus-wide check would
 5. **Validation rules** — short bullet list, one rule per line, not
    paragraphs. Concrete, checkable rules the data actually supports
    (e.g. "every decision record must have a `status` field with value
@@ -188,8 +222,19 @@ Before saving, double-check the file: the Summary section must be the
 first thing in the document after the title, not appended at the end.
 Check the prose length against the ~400–600 word budget from Step 6 —
 if it's substantially over, move content into tables or cut it rather
-than treat this corpus as a special case. Then save the report to the
-outputs directory and present it. If `markdown-docs-corpus-discovery`
-hasn't run in this conversation and the corpus looks large or messy,
-mention it could add useful context, but don't insist — this skill's
-output stands on its own.
+than treat this corpus as a special case.
+
+Also check the Missing metadata table specifically: it must have the
+`Type | Bucket | Field | Present in (%) | Verdict` columns from Step 6,
+with at least one reference-content type marked `N/A` rather than
+`gap` — a table with only a `Field | Present in (%) | Types affected`
+shape, or one where every type gets the same verdict regardless of
+bucket, means Step 5's calibration didn't actually happen and needs to
+be redone before saving. This is the calibration step that's most prone
+to being silently skipped in favor of the simpler flat check — verify
+it explicitly rather than assuming it happened because Step 5 was read.
+
+Then save the report to the outputs directory and present it. If
+`markdown-docs-corpus-discovery` hasn't run in this conversation and
+the corpus looks large or messy, mention it could add useful context,
+but don't insist — this skill's output stands on its own.

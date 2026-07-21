@@ -7,7 +7,7 @@
     {
       "name": "markdown-ia",
       "source": "./plugins/markdown-ia",
-      "description": "Information-architecture analysis for Markdown documentation corpora, starting with first-pass corpus discovery (file counts, structure, freshness, gaps)."
+      "description": "Information-architecture analysis for Markdown documentation corpora: corpus discovery (file counts, structure, freshness, gaps), content-model inference (document types, schemas, metadata rules), and vocabulary/taxonomy governance (terminology and tagging consistency)."
     }
   ]
 }
