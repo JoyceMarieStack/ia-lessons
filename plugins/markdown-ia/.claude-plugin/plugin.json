@@ -1,0 +1,8 @@
+{
+  "name": "markdown-ia",
+  "version": "1.0.0",
+  "description": "Information-architecture analysis for Markdown documentation corpora: corpus reconnaissance, content modeling, and vocabulary governance.",
+  "author": {
+    "name": "JoyceMarieStack"
+  }
+}

@@ -8,6 +8,11 @@
       "name": "terminology-audit",
       "source": "./plugins/terminology-audit",
       "description": "Audit technical/engineering docs or spec-driven-development (SDD) spec files for inconsistent terminology and produce a termbase and a written audit report."
+    },
+    {
+      "name": "markdown-ia",
+      "source": "./plugins/markdown-ia",
+      "description": "Information-architecture analysis for Markdown documentation corpora, starting with first-pass corpus discovery (file counts, structure, freshness, gaps)."
     }
   ]
 }

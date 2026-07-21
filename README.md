@@ -1,6 +1,6 @@
 # ia-lessons
 
-A Claude Code plugin marketplace repo. Currently distributes one plugin:
+A Claude Code plugin marketplace repo. Currently distributes two plugins:
 
 ## Plugins
 
@@ -14,12 +14,19 @@ A Claude Code plugin marketplace repo. Currently distributes one plugin:
     spec-driven-development (SDD) spec files handed to an AI coding
     agent as a prompt, with a stricter completion bar (zero unresolved
     termbase rows) before the spec is considered agent-ready.
+- **[markdown-ia](plugins/markdown-ia/)** — information-architecture
+  analysis for Markdown documentation corpora:
+  - `markdown-docs-corpus-discovery` — first-pass reconnaissance of a
+    Markdown corpus (file/directory counts, nav-config vs. folder
+    structure, git provenance, freshness/maturity signals) before
+    deeper IA work begins.
 
 ## Install
 
 ```
 /plugin marketplace add JoyceMarieStack/ia-lessons
 /plugin install terminology-audit
+/plugin install markdown-ia
 ```
 
 ## Examples
