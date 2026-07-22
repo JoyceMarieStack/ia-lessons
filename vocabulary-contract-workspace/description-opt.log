@@ -4,3 +4,33 @@ Split: 12 train, 8 test (holdout=0.4)
 Iteration 1/4
 Description: Turn a termbase.csv controlled vocabulary into an enforceable naming contract for spec-driven development. Use this whenever the user mentions a termbase, glossary, canonical terms, naming consistency, vocabulary drift, term linting, AGENTS.md vocabulary sections, or wants specs/proposals/generated code checked against approved terminology — even if they don't say 'vocabulary contract'. Also use when the user asks to render a glossary into agent context or to find new candidate terms after an implementation.
 ============================================================
+Train: 21/36 correct, precision=100% recall=17% accuracy=58% (84.6s)
+  [FAIL] rate=1/3 expected=True: what new domain terms did the payments refactor introduce th
+  [FAIL] rate=0/3 expected=True: take the terminology audit output (termbase.csv, columns pre
+  [FAIL] rate=0/3 expected=True: our specs keep flip flopping between extend mode, extension 
+  [FAIL] rate=1/3 expected=True: render our glossary csv into a compact preamble block i can 
+  [FAIL] rate=1/3 expected=True: check my draft spec at openspec/changes/add-caching/spec.md 
+  [FAIL] rate=0/3 expected=True: we have a termbase.csv from last month's terminology audit s
+  [PASS] rate=0/3 expected=False: translate the terms in our glossary.csv into French and Germ
+  [PASS] rate=0/3 expected=False: run eslint on src/ and fix the naming-convention warnings it
+  [PASS] rate=0/3 expected=False: add a definitions section to the README that explains what e
+  [PASS] rate=0/3 expected=False: audit our engineering docs for inconsistent terminology and 
+  [PASS] rate=0/3 expected=False: summarize the terminology-audit report in examples/sample-re
+  [PASS] rate=0/3 expected=False: terms.csv has duplicate rows with slightly different ids — d
+Test : 13/24 correct, precision=100% recall=8% accuracy=54% (0.0s)
+  [FAIL] rate=0/3 expected=True: we just merged the scheduler implementation, scan the new co
+  [FAIL] rate=0/3 expected=True: vocab drift check on my tasks file pls, termbase is in the r
+  [PASS] rate=0/3 expected=False: rename the variable extendMode to inheritMode across the who
+  [FAIL] rate=1/3 expected=True: someone on the team keeps writing 'execution' instead of 'ru
+  [PASS] rate=0/3 expected=False: proofread my spec.md for grammar, spelling and passive voice
+  [FAIL] rate=0/3 expected=True: before I cut tasks from this spec can you verify it only use
+  [PASS] rate=0/3 expected=False: write an openspec proposal and spec for the new caching laye
+  [PASS] rate=0/3 expected=False: show me a stem and leaf diagram of which terms dominate acro
+
+Improving description...
+Proposed (18.9s): Use this skill when a controlled-vocabulary CSV (termbase.csv, glossary csv, approved/preferred terms list — often the output of a terminology audit) already exists and the user wants to put it to work downstream: (1) render it into agent or reviewer context — an AGENTS.md/CLAUDE.md vocabulary section or a compact preamble block for a spec/proposal — so writers and codegen agents stop inventing synonyms; (2) check or lint a draft spec, proposal, or tasks file against the approved terms and report wording drift, banned variants, or flip-flopping between synonyms; (3) after an implementation or refactor, find recurring new domain terms not yet in the termbase and report candidates with counts and locations (read-only; never edits the termbase). Trigger for any request to enforce, apply, or make specs/agents "actually follow" an existing term list. Do NOT use to create a termbase or audit docs to build a glossary from scratch — that's terminology-audit; this skill consumes the finished CSV.
+
+============================================================
+Iteration 2/4
+Description: Use this skill when a controlled-vocabulary CSV (termbase.csv, glossary csv, approved/preferred terms list — often the output of a terminology audit) already exists and the user wants to put it to work downstream: (1) render it into agent or reviewer context — an AGENTS.md/CLAUDE.md vocabulary section or a compact preamble block for a spec/proposal — so writers and codegen agents stop inventing synonyms; (2) check or lint a draft spec, proposal, or tasks file against the approved terms and report wording drift, banned variants, or flip-flopping between synonyms; (3) after an implementation or refactor, find recurring new domain terms not yet in the termbase and report candidates with counts and locations (read-only; never edits the termbase). Trigger for any request to enforce, apply, or make specs/agents "actually follow" an existing term list. Do NOT use to create a termbase or audit docs to build a glossary from scratch — that's terminology-audit; this skill consumes the finished CSV.
+============================================================
