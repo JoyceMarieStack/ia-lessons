@@ -16,10 +16,11 @@ ia-lessons/
 ├── LICENSE
 ├── plugins/
 │   ├── markdown-ia/                  # IA analysis for Markdown corpora
-│   │   └── skills/
-│   │       ├── markdown-docs-corpus-discovery/
-│   │       ├── markdown-content-model-discovery/
-│   │       └── markdown-vocabulary-governance/
+│   │   ├── skills/
+│   │   │   ├── markdown-docs-corpus-discovery/
+│   │   │   ├── markdown-content-model-discovery/
+│   │   │   └── markdown-vocabulary-governance/
+│   │   └── evals/                    # eval prompts for all three skills (self-scan fixture)
 │   ├── terminology-audit/            # terminology auditing → termbase
 │   │   ├── skills/
 │   │   │   ├── terminology-audit/          # for human-facing docs
@@ -111,15 +112,35 @@ concept-by-concept walkthrough of controlled vocabulary management.
 
 ## Tests
 
-Each skill that produces structured, checkable output (a CSV, a specific
-report format) has an `evals/evals.json` — eval prompts plus assertions, in
-the format the `skill-creator` skill's eval loop consumes — under its
-plugin's `evals/` directory. Run them the same way vocabulary-contract's were
-validated: spawn an agent per eval prompt pointed at the skill, grade the
-assertions against its output. `vocabulary-contract/evals/grade.py` is a
-worked example of a programmatic grader. Eval run outputs, the
-description-optimization log/report, and packaged `.skill` files are
-regenerated, not committed — see `.gitignore`.
+Every plugin has an `evals/evals.json` — eval prompts plus assertions, in the
+format the `skill-creator` skill's eval loop consumes — under its `evals/`
+directory. Run them the same way vocabulary-contract's were validated: spawn
+an agent per eval prompt pointed at the skill, check the assertions against
+its output.
+
+The assertion style differs by how checkable each skill's output is:
+
+- **vocabulary-contract** and **terminology-audit** produce structured or
+  format-constrained output (a CSV with a fixed column set, a specific report
+  section list, known planted findings in the fixtures), so their assertions
+  can be exact and mechanically graded — `vocabulary-contract/evals/grade.py`
+  is a worked example of a programmatic grader. Even here, exact-match
+  assertions on *which* findings a judgment-based skill catches
+  (`sdd-terminology-audit`) turned out to overfit one run's output — a real
+  spec can have more genuine ambiguities than any one pass will surface, so
+  those assertions check for internal consistency and the one
+  always-must-catch finding, not an exact checklist.
+- **markdown-ia**'s three skills produce first-pass analysis, not checkable
+  data, so `plugins/markdown-ia/evals/evals.json` limits assertions to
+  structure (required sections present, in order, table-first formatting,
+  correct scope decisions) and leaves substance to a qualitative read — don't
+  force exact-content assertions onto a judgment task. Its fixture is this
+  repo itself: real git history, genuine document-type variety, and close to
+  no frontmatter tagging in use, which is itself a useful test — a good run
+  says so rather than inventing a taxonomy the corpus doesn't have.
+
+Eval run outputs, the description-optimization log/report, and packaged
+`.skill` files are regenerated, not committed — see `.gitignore`.
 
 ## How the pieces fit
 
