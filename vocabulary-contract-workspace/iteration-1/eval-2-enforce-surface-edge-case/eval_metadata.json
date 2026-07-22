@@ -1,0 +1,11 @@
+{
+  "eval_id": 2,
+  "eval_name": "enforce-surface-edge-case",
+  "prompt": "Run a terminology check on test-fixtures/enforce-edge/spec.md using the termbase at test-fixtures/termbase.csv and report anything that drifts from the approved terms. Save your report as findings.md.",
+  "assertions": [
+    "'extend-mode' in prose (line 5) is flagged as a wrong surface form for prose",
+    "extendMode inside the fenced code block is NOT flagged (correct code form)",
+    "`--extend-mode` in inline code is NOT flagged",
+    "Exactly 1 finding total, with file, line, and quoted line"
+  ]
+}

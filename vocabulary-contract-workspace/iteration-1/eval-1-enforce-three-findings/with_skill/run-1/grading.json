@@ -1,0 +1,46 @@
+{
+  "expectations": [
+    {
+      "text": "Report contains exactly 3 findings",
+      "passed": true,
+      "evidence": "explicit count of 3 or 3 finding sections detected"
+    },
+    {
+      "text": "Both 'extension mode' occurrences flagged -> extend mode, lines 5 and 14",
+      "passed": true,
+      "evidence": "'extension mode' mentioned 5x"
+    },
+    {
+      "text": "'local schema override' flagged -> project-local schema, line 12",
+      "passed": true,
+      "evidence": "present"
+    },
+    {
+      "text": "Line numbers 5, 12, 14 all referenced",
+      "passed": true,
+      "evidence": "all present"
+    },
+    {
+      "text": "config.yaml NOT flagged as a violation",
+      "passed": true,
+      "evidence": "not flagged"
+    },
+    {
+      "text": "'proposal draft' NOT flagged (candidate status)",
+      "passed": true,
+      "evidence": "not flagged"
+    },
+    {
+      "text": "Findings quote the offending lines",
+      "passed": true,
+      "evidence": "variant text quoted"
+    }
+  ],
+  "passed": true,
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  }
+}

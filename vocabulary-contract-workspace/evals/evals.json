@@ -1,0 +1,75 @@
+{
+  "skill_name": "vocabulary-contract",
+  "evals": [
+    {
+      "id": 0,
+      "eval_name": "render-agents-fragment",
+      "prompt": "I have a termbase at test-fixtures/termbase.csv produced by a terminology audit. Render it into an AGENTS.md vocabulary fragment I can paste into my repo's agent context, and also give me the compact spec preamble block. Save the fragment as agents-fragment.md and the preamble as spec-preamble.md.",
+      "expected_output": "AGENTS.md fragment covering all 8 terms in imperative prose (no table), transforms included only where the termbase declares them, no invented transforms for validation pass / spec preamble, candidate-status term marked non-binding, source row citations per entry; plus a compact spec preamble block.",
+      "files": ["test-fixtures/termbase.csv"],
+      "assertions": [
+        "All 8 termbase terms appear in the fragment (extend mode, project-local schema, config.yaml, schema registry, merge policy, validation pass, spec preamble, draft proposal)",
+        "Entries are imperative prose, not a markdown table",
+        "Declared transforms are present: extendMode, extend-mode, --extend-mode, EXTEND_MODE, projectLocalSchema, SchemaRegistry, mergePolicy",
+        "No invented transforms: the strings validationPass, specPreamble, validation_pass, spec_preamble do not appear",
+        "Banned variants are stated as prohibitions (e.g. never 'extension mode' / 'inherit mode')",
+        "draft proposal (status candidate) is marked as pending/non-binding, not rendered as an enforced entry",
+        "Every entry carries a source citation to a termbase row"
+      ]
+    },
+    {
+      "id": 1,
+      "eval_name": "enforce-three-findings",
+      "prompt": "Please check my draft spec at test-fixtures/enforce/spec.md against the termbase at test-fixtures/termbase.csv and tell me where it drifts from the approved terminology. Save your report as findings.md.",
+      "expected_output": "Exactly 3 findings: 'extension mode' at lines 5 and 14 -> extend mode; 'local schema override' at line 12 -> project-local schema. config.yaml usage not flagged; 'proposal draft' not flagged (candidate status). Each finding quotes the offending line.",
+      "files": ["test-fixtures/enforce/spec.md", "test-fixtures/termbase.csv"],
+      "assertions": [
+        "Report contains exactly 3 findings",
+        "Both occurrences of 'extension mode' flagged with canonical replacement 'extend mode', with line numbers 5 and 14",
+        "'local schema override' flagged once with canonical replacement 'project-local schema', line 12",
+        "config.yaml is NOT flagged",
+        "'proposal draft' is NOT flagged (its term has status candidate, not approved)",
+        "Each finding quotes the offending line and cites file + line number"
+      ]
+    },
+    {
+      "id": 2,
+      "eval_name": "enforce-surface-edge-case",
+      "prompt": "Run a terminology check on test-fixtures/enforce-edge/spec.md using the termbase at test-fixtures/termbase.csv and report anything that drifts from the approved terms. Save your report as findings.md.",
+      "expected_output": "Exactly 1 finding: 'extend-mode' in prose (line 5) flagged as wrong surface form with suggestion to use 'extend mode' in prose. extendMode inside the code block and `--extend-mode` in inline code are NOT flagged.",
+      "files": ["test-fixtures/enforce-edge/spec.md", "test-fixtures/termbase.csv"],
+      "assertions": [
+        "'extend-mode' in prose (line 5) is flagged as a wrong surface form for prose",
+        "extendMode inside the fenced code block is NOT flagged (correct code form)",
+        "`--extend-mode` in inline code is NOT flagged",
+        "Exactly 1 finding total, with file, line, and quoted line"
+      ]
+    },
+    {
+      "id": 3,
+      "eval_name": "roundtrip-candidates",
+      "prompt": "We just finished the implementation work that lives in test-fixtures/roundtrip/. Using the termbase at test-fixtures/termbase.csv, find recurring new domain terms the implementation introduced that aren't in the termbase yet, and propose them as candidates for the next termbase revision. Do NOT modify the termbase. Save the proposal as candidates.md.",
+      "expected_output": "'schema pinning' proposed as a candidate with occurrence count (>=4) and example file:line locations. One-off nouns (rollback window, audit trail) not proposed. Explicit statement that nothing was written to the termbase. termbase.csv byte-identical after the run.",
+      "files": ["test-fixtures/roundtrip/", "test-fixtures/termbase.csv"],
+      "assertions": [
+        "'schema pinning' is proposed as a candidate term",
+        "The proposal includes an occurrence count of at least 4 and at least 2 example file:line locations",
+        "One-off nouns ('rollback window', 'audit trail') are NOT proposed as candidates",
+        "The report explicitly states nothing was written to the termbase / candidates need human approval",
+        "test-fixtures/termbase.csv is byte-identical to its pre-run state"
+      ]
+    },
+    {
+      "id": 4,
+      "eval_name": "clean-pass",
+      "prompt": "Check test-fixtures/clean/spec.md against the termbase at test-fixtures/termbase.csv for terminology violations and give me the report. Save it as findings.md.",
+      "expected_output": "An explicit 'no findings / no violations' statement naming what was checked (files and approved-term count) — not silence or an empty file.",
+      "files": ["test-fixtures/clean/spec.md", "test-fixtures/termbase.csv"],
+      "assertions": [
+        "The report explicitly states zero findings / no violations",
+        "The report says what was checked (the spec file and the approved terms), so the clean result is verifiable",
+        "findings.md is non-empty"
+      ]
+    }
+  ]
+}

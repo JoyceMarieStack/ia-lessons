@@ -1,0 +1,14 @@
+{
+  "eval_id": 0,
+  "eval_name": "render-agents-fragment",
+  "prompt": "I have a termbase at test-fixtures/termbase.csv produced by a terminology audit. Render it into an AGENTS.md vocabulary fragment I can paste into my repo's agent context, and also give me the compact spec preamble block. Save the fragment as agents-fragment.md and the preamble as spec-preamble.md.",
+  "assertions": [
+    "All 8 termbase terms appear in the fragment (extend mode, project-local schema, config.yaml, schema registry, merge policy, validation pass, spec preamble, draft proposal)",
+    "Entries are imperative prose, not a markdown table",
+    "Declared transforms are present: extendMode, extend-mode, --extend-mode, EXTEND_MODE, projectLocalSchema, SchemaRegistry, mergePolicy",
+    "No invented transforms: the strings validationPass, specPreamble, validation_pass, spec_preamble do not appear",
+    "Banned variants are stated as prohibitions (e.g. never 'extension mode' / 'inherit mode')",
+    "draft proposal (status candidate) is marked as pending/non-binding, not rendered as an enforced entry",
+    "Every entry carries a source citation to a termbase row"
+  ]
+}
