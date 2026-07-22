@@ -1,51 +1,16 @@
 # ia-lessons
 
-A Claude Code plugin marketplace repo. Currently distributes two plugins:
+A Claude Code plugin marketplace repo. 
 
-## Plugins
+You can't organize, label or navigate content you haven't actually looked at.  
 
-- **[terminology-audit](plugins/terminology-audit/)** — two skills, no
-  bundled scripts (pure judgment work, so it runs the same in any agent/
-  environment):
-  - `terminology-audit` — audits human-facing technical/engineering docs
-    for inconsistent terminology and produces a termbase and a written
-    audit report.
-  - `sdd-terminology-audit` — the same audit, retargeted at
-    spec-driven-development (SDD) spec files handed to an AI coding
-    agent as a prompt, with a stricter completion bar (zero unresolved
-    termbase rows) before the spec is considered agent-ready.
-- **[markdown-ia](plugins/markdown-ia/)** — information-architecture
-  analysis for Markdown documentation corpora:
-  - `markdown-docs-corpus-discovery` — first-pass reconnaissance of a
-    Markdown corpus (file/directory counts, nav-config vs. folder
-    structure, git provenance, freshness/maturity signals) before
-    deeper IA work begins.
 
-## Install
+* Corpus Discovery -  how much content, what shape is it in, is it maintained or abandoned.  
+* Content Model Discovery - A content model is what IA people mean when they talk about 'organisation systems' made concrete: what types of docs exist, what structure each type follows, what metadata each carries.  
+* Vocabularly Governance - This is two IA concerns at once: labeling (are we calling the same thing by the same name — ApplicationSet vs Application Set) and organization via facets/taxonomy (is there a controlled way to classify content — tags, categories — or is folder placement the only signal)
 
-```
-/plugin marketplace add JoyceMarieStack/ia-lessons
-/plugin install terminology-audit
-/plugin install markdown-ia
-```
 
-## Examples
 
-[`examples/`](examples/) has a worked walkthrough of both skills — sample
-source docs, real generated output, and notes tying the results back to
-information-architecture concepts (controlled vocabulary, synonymy vs.
-polysemy, etc.) and to spec-driven-development workflows.
+These three things answer: what exists, what shape it has and what words and categories are already in use to describe it. 
 
-## Repo layout
 
-```
-.claude-plugin/
-  marketplace.json          # lists the plugins this repo distributes
-plugins/
-  terminology-audit/        # the plugin itself
-examples/
-  README.md                 # walkthrough notes
-  sample-dataset/           # source docs used in the terminology-audit walkthrough
-  sample-reports/           # generated termbase/report output
-  sample-sdd-dataset/       # sample spec files used in the sdd-terminology-audit walkthrough
-```

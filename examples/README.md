@@ -81,6 +81,29 @@ Before handing specs to a coding agent, run the terminology audit on the spec fi
 3. **Resolve every "needs stakeholder input" row before generation, not after.** The direct SDD parallel to human-in-the-loop governance — exactly the ambiguities a human needs to settle before the planning phase hands off to code generation, because once code exists, disagreement about intent gets baked into behavior instead of staying visible as a question.
 4. **Feed the termbase into the agent's context directly** — this turns the audit from a report into an actual SDD artifact. `termbase.csv`'s `preferred_term` / `forbidden_variants` columns are a machine-readable ubiquitous-language table. Drop that into `AGENTS.md` or a Cursor/Claude Code rules file alongside the spec, so the agent isn't inferring the naming convention from inconsistent prose — it's given the resolved vocabulary as a constraint. That's the "structured input to reduce hallucinations" idea.
 
+### Worked example: the job-scheduler spec
+
+`sample-sdd-dataset/job-scheduler-spec.md` is a small teaching spec with
+three ambiguities planted on purpose — one of each rule the
+`sdd-terminology-audit` skill knows:
+
+- **`AMB-SYN`** (synonym conflict): "task" vs. "job" for the same
+  schedulable unit — the classic way a generated codebase grows two
+  entities for one thing.
+- **`AMB-POLY`** (homograph collision): "the schedule" meaning both the
+  cron expression and the list of upcoming runs, sometimes in the same
+  sentence's neighborhood.
+- **`AMB-SCENT`** (scent failure): "purge all entries whose TTL has
+  expired" when the spec defines two different time-to-lives.
+
+It also plants two traps the audit should *refuse* to flag: a
+false-synonym pair ("cancel" vs. "kill", which the spec explicitly
+distinguishes — merging them would create ambiguity, not remove it) and
+harmless shorthand ("cron" after the qualified first use "cron
+expression"). The outputs — report with the Ambiguity Alerts block,
+`termbase.csv`, and `ambiguity-alerts.csv` — are in
+`sample-reports/job-scheduler/`.
+
 ### The honest limitation, worth stating plainly
 
 A terminology audit catches vocabulary ambiguity — it will never catch a spec that's internally logically inconsistent while using perfectly consistent words (e.g., a precondition that contradicts a postcondition two sections later, both phrased with impeccably consistent terminology). That's a different failure mode than SDD's other named risks (spec drift over time, non-determinism, the code-vs-spec-as-source-of-truth debate), which sit outside what a terminology tool can see. Worth being upfront about that scope when pitching this to a team — it's one piece of spec quality, not spec review in full.
