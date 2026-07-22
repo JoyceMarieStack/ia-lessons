@@ -10,8 +10,16 @@ import re
 import subprocess
 import sys
 
-BASE = "/home/user/ia-lessons/vocabulary-contract-workspace"
-IT = os.path.join(BASE, sys.argv[1] if len(sys.argv) > 1 else "iteration-1")
+"""
+Run outputs are NOT committed to git — they're regenerated per run. Point
+--runs-dir at a scratch directory (default: a sibling `runs/` dir, gitignored)
+containing eval-*/with_skill/run-N/outputs/ produced by a skill-creator-style
+eval run against this evals.json.
+"""
+
+SKILL_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DEFAULT_RUNS = os.path.join(SKILL_DIR, "evals", "runs")
+IT = os.path.join(DEFAULT_RUNS, sys.argv[1] if len(sys.argv) > 1 else "iteration-1")
 
 
 def read(evaldir, name):
@@ -137,8 +145,9 @@ oneoffs = [w for w in ("rollback window", "audit trail")
            if re.search(rf"(?i)^.*{w}.*$", rep, re.M) and
               re.search(rf"(?i)propose[^\n]*{w}|{w}[^\n]*candidate\b(?![^\n]*not)", rep)]
 nowrote = re.search(r"(?i)(not(hing)?\s+(been\s+)?(written|added|modif)|termbase (was|is) (unchanged|not modified)|no changes .*termbase)", rep)
-md5_ok = subprocess.run(["md5sum", "-c", os.path.join(BASE, "termbase.md5")],
-                        capture_output=True, cwd="/home/user/ia-lessons").returncode == 0
+termbase_path = os.path.join(SKILL_DIR, "test-fixtures", "termbase.csv")
+md5_ok = subprocess.run(["git", "diff", "--quiet", "--", termbase_path],
+                        capture_output=True, cwd=SKILL_DIR).returncode == 0
 grade("roundtrip-candidates", [
     ("'schema pinning' proposed as candidate",
      bool(sp), "present" if sp else "absent"),

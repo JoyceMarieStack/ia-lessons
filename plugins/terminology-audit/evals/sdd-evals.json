@@ -1,0 +1,34 @@
+{
+  "skill_name": "sdd-terminology-audit",
+  "note": "Fixture is examples/sample-sdd-dataset/job-scheduler-spec.md at the repo root. A golden report and ambiguity-alerts.csv already exist at examples/sample-reports/job-scheduler/ with three known findings: task/job (AMB-SYN), TTL referent in FR-006 (AMB-SCENT), and schedule referent in FR-003 (AMB-POLY). Use those as the reference for what a correct run should catch, not a byte-for-byte target.",
+  "evals": [
+    {
+      "id": 0,
+      "eval_name": "job-scheduler-known-findings",
+      "prompt": "Run a terminology ambiguity audit on examples/sample-sdd-dataset/job-scheduler-spec.md before I hand it to a coding agent. I want the ambiguity alerts, the termbase, and the CSV.",
+      "expected_output": "terminology-audit-report.md led by an Ambiguity Alerts block, termbase.csv (7 columns, no status column), and ambiguity-alerts.csv (10 columns). Should catch the same three findings as the existing golden report: task vs job (AMB-SYN, object facet), TTL referent ambiguity in FR-006 (AMB-SCENT, value facet), and schedule referent ambiguity in FR-003 (AMB-POLY, field facet). Every alert cites a real anchor (FR-00N or ASN) and a quoted fragment.",
+      "files": ["examples/sample-sdd-dataset/job-scheduler-spec.md"],
+      "assertions": [
+        "The task/job synonym conflict is caught and classified AMB-SYN",
+        "The TTL referent ambiguity in FR-006 is caught and classified AMB-SCENT",
+        "The schedule referent ambiguity in FR-003 is caught and classified AMB-POLY",
+        "ambiguity-alerts.csv has exactly these 10 columns: alert_id, rule, facet, file, anchor, quoted_text, meaning_a, meaning_b, supported_wording, decision_needed",
+        "termbase.csv does NOT have a status column (unresolved concepts are omitted from the termbase entirely, not marked with a status)",
+        "Every code (AMB-SYN / AMB-POLY / AMB-SCENT) printed in the report is paired with its plain-language name",
+        "The Ambiguity Alerts block count matches the Summary's stated finding counts"
+      ]
+    },
+    {
+      "id": 1,
+      "eval_name": "scope-boundary-rejection",
+      "prompt": "Audit examples/sample-sdd-dataset/job-scheduler-spec.md for terminology ambiguity, and while you're at it also flag anywhere the spec is missing acceptance criteria or has incomplete requirements.",
+      "expected_output": "The skill performs the terminology audit as normal but explicitly declines the completeness/acceptance-criteria request as out of scope (per its own Scope Limitation section), rather than silently complying or silently ignoring the request.",
+      "files": ["examples/sample-sdd-dataset/job-scheduler-spec.md"],
+      "assertions": [
+        "The response or report explicitly states that completeness/acceptance-criteria review is out of scope for this skill",
+        "No findings about 'missing acceptance criteria' or 'incomplete requirements' appear in the Ambiguity Alerts block or Terminology Findings table",
+        "The terminology-ambiguity portion of the audit still runs and produces the expected deliverables"
+      ]
+    }
+  ]
+}

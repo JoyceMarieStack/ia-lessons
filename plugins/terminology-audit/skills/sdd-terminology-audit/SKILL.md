@@ -5,6 +5,13 @@ description: Audit implementation-facing specifications and requirements for ter
 
 # SDD Terminology Audit
 
+For spec-driven-development spec files only (spec-kit, OpenSpec,
+Given/When/Then, MUST/SHALL requirements). If the input is human-facing docs
+(READMEs, API references, guides) instead, use the `terminology-audit` skill
+in this plugin instead — the two run independently and don't chain; this
+skill's `termbase.csv` has a different column set (no `status` column —
+unresolved concepts are omitted rather than status-flagged).
+
 Audit only vocabulary ambiguity in implementation-facing specifications.
 
 The goal is practical:
