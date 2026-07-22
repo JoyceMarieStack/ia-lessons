@@ -1,0 +1,6 @@
+Split: 12 train, 8 test (holdout=0.4)
+
+============================================================
+Iteration 1/4
+Description: Turn a termbase.csv controlled vocabulary into an enforceable naming contract for spec-driven development. Use this whenever the user mentions a termbase, glossary, canonical terms, naming consistency, vocabulary drift, term linting, AGENTS.md vocabulary sections, or wants specs/proposals/generated code checked against approved terminology — even if they don't say 'vocabulary contract'. Also use when the user asks to render a glossary into agent context or to find new candidate terms after an implementation.
+============================================================

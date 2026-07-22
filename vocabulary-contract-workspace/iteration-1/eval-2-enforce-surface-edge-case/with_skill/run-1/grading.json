@@ -1,0 +1,31 @@
+{
+  "expectations": [
+    {
+      "text": "prose 'extend-mode' flagged as wrong surface form",
+      "passed": true,
+      "evidence": "flagged with surface/prose framing"
+    },
+    {
+      "text": "extendMode in code block NOT flagged as violation",
+      "passed": true,
+      "evidence": "code usage treated as correct"
+    },
+    {
+      "text": "`--extend-mode` inline code NOT flagged",
+      "passed": true,
+      "evidence": "not flagged"
+    },
+    {
+      "text": "Exactly 1 finding, with line 5 reference",
+      "passed": true,
+      "evidence": "one=True, line5=True"
+    }
+  ],
+  "passed": true,
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  }
+}

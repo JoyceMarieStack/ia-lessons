@@ -1,0 +1,26 @@
+{
+  "expectations": [
+    {
+      "text": "Explicit zero-findings statement",
+      "passed": true,
+      "evidence": "clean"
+    },
+    {
+      "text": "Says what was checked (file and approved terms)",
+      "passed": true,
+      "evidence": "scope stated"
+    },
+    {
+      "text": "findings.md non-empty",
+      "passed": true,
+      "evidence": "1463 chars"
+    }
+  ],
+  "passed": true,
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

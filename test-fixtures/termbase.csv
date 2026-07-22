@@ -1,0 +1,9 @@
+term,variants,code_identifier,file_form,cli_flag,env_var,definition,status
+extend mode,extension mode;inherit mode,extendMode,extend-mode,--extend-mode,EXTEND_MODE,The mode in which a project-local schema extends the base schema instead of replacing it.,approved
+project-local schema,local schema;local schema override;project schema,projectLocalSchema,,,,A schema defined inside a project directory that applies only to that project.,approved
+config.yaml,config.yml;configuration file,,config.yaml,,,The single configuration file read at startup from the project root.,approved
+schema registry,registry service;schema store,SchemaRegistry,,,,The service that stores and serves versioned base schemas.,approved
+merge policy,merge strategy;combine policy,mergePolicy,,--merge-policy,MERGE_POLICY,The rule set that decides how project-local values combine with base values.,approved
+validation pass,,,,,,A single end-to-end run of schema validation over a project.,approved
+spec preamble,,,,,,The vocabulary block pasted at the top of a spec or proposal document.,approved
+draft proposal,proposal draft,,,,,An OpenSpec proposal that has not yet been accepted as a spec.,candidate
