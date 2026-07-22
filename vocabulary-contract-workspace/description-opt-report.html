@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>vocabulary-contract — Skill Description Optimization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lora', Georgia, serif;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            background: #faf9f5;
+            color: #141413;
+        }
+        h1 { font-family: 'Poppins', sans-serif; color: #141413; }
+        .explainer {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #e8e6dc;
+            color: #b0aea5;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        .summary {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #e8e6dc;
+        }
+        .summary p { margin: 5px 0; }
+        .best { color: #788c5d; font-weight: bold; }
+        .table-container {
+            overflow-x: auto;
+            width: 100%;
+        }
+        table {
+            border-collapse: collapse;
+            background: white;
+            border: 1px solid #e8e6dc;
+            border-radius: 6px;
+            font-size: 12px;
+            min-width: 100%;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #e8e6dc;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+        th {
+            font-family: 'Poppins', sans-serif;
+            background: #141413;
+            color: #faf9f5;
+            font-weight: 500;
+        }
+        th.test-col {
+            background: #6a9bcc;
+        }
+        th.query-col { min-width: 200px; }
+        td.description {
+            font-family: monospace;
+            font-size: 11px;
+            word-wrap: break-word;
+            max-width: 400px;
+        }
+        td.result {
+            text-align: center;
+            font-size: 16px;
+            min-width: 40px;
+        }
+        td.test-result {
+            background: #f0f6fc;
+        }
+        .pass { color: #788c5d; }
+        .fail { color: #c44; }
+        .rate {
+            font-size: 9px;
+            color: #b0aea5;
+            display: block;
+        }
+        tr:hover { background: #faf9f5; }
+        .score {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        .score-good { background: #eef2e8; color: #788c5d; }
+        .score-ok { background: #fef3c7; color: #d97706; }
+        .score-bad { background: #fceaea; color: #c44; }
+        .train-label { color: #b0aea5; font-size: 10px; }
+        .test-label { color: #6a9bcc; font-size: 10px; font-weight: bold; }
+        .best-row { background: #f5f8f2; }
+        th.positive-col { border-bottom: 3px solid #788c5d; }
+        th.negative-col { border-bottom: 3px solid #c44; }
+        th.test-col.positive-col { border-bottom: 3px solid #788c5d; }
+        th.test-col.negative-col { border-bottom: 3px solid #c44; }
+        .legend { font-family: 'Poppins', sans-serif; display: flex; gap: 20px; margin-bottom: 10px; font-size: 13px; align-items: center; }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-swatch { width: 16px; height: 16px; border-radius: 3px; display: inline-block; }
+        .swatch-positive { background: #141413; border-bottom: 3px solid #788c5d; }
+        .swatch-negative { background: #141413; border-bottom: 3px solid #c44; }
+        .swatch-test { background: #6a9bcc; }
+        .swatch-train { background: #141413; }
+    </style>
+</head>
+<body>
+    <h1>vocabulary-contract — Skill Description Optimization</h1>
+    <div class="explainer">
+        <strong>Optimizing your skill's description.</strong> This page updates automatically as Claude tests different versions of your skill's description. Each row is an iteration — a new description attempt. The columns show test queries: green checkmarks mean the skill triggered correctly (or correctly didn't trigger), red crosses mean it got it wrong. The "Train" score shows performance on queries used to improve the description; the "Test" score shows performance on held-out queries the optimizer hasn't seen. When it's done, Claude will apply the best-performing description to your skill.
+    </div>
+
+    <div class="summary">
+        <p><strong>Original:</strong> Turn a termbase.csv controlled vocabulary into an enforceable naming contract for spec-driven development. Use this whenever the user mentions a termbase, glossary, canonical terms, naming consistency, vocabulary drift, term linting, AGENTS.md vocabulary sections, or wants specs/proposals/generated code checked against approved terminology — even if they don&#x27;t say &#x27;vocabulary contract&#x27;. Also use when the user asks to render a glossary into agent context or to find new candidate terms after an implementation.</p>
+        <p class="best"><strong>Best:</strong> Turn a termbase.csv controlled vocabulary into an enforceable naming contract for spec-driven development. Use this whenever the user mentions a termbase, glossary, canonical terms, naming consistency, vocabulary drift, term linting, AGENTS.md vocabulary sections, or wants specs/proposals/generated code checked against approved terminology — even if they don&#x27;t say &#x27;vocabulary contract&#x27;. Also use when the user asks to render a glossary into agent context or to find new candidate terms after an implementation.</p>
+        <p><strong>Best Score:</strong> 4/8 (test)</p>
+        <p><strong>Iterations:</strong> 4 | <strong>Train:</strong> 12 | <strong>Test:</strong> 8</p>
+    </div>
+
+    <div class="legend">
+        <span style="font-weight:600">Query columns:</span>
+        <span class="legend-item"><span class="legend-swatch swatch-positive"></span> Should trigger</span>
+        <span class="legend-item"><span class="legend-swatch swatch-negative"></span> Should NOT trigger</span>
+        <span class="legend-item"><span class="legend-swatch swatch-train"></span> Train</span>
+        <span class="legend-item"><span class="legend-swatch swatch-test"></span> Test</span>
+    </div>
+
+    <div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Iter</th>
+                <th>Train</th>
+                <th>Test</th>
+                <th class="query-col">Description</th>
+                <th class="positive-col">what new domain terms did the payments refactor introduce that aren&#x27;t in termbase.csv? give me counts and example locations, don&#x27;t touch the termbase itself</th>
+                <th class="positive-col">take the terminology audit output (termbase.csv, columns preferred_term / forbidden_variants) and make it into something claude will actually follow when it drafts tasks.md files</th>
+                <th class="positive-col">our specs keep flip flopping between extend mode, extension mode and inherit mode for the same feature. we already have a termbase with the approved term — enforce it on specs/*.md</th>
+                <th class="positive-col">render our glossary csv into a compact preamble block i can paste at the top of proposal.md so reviewers see the binding vocabulary</th>
+                <th class="positive-col">check my draft spec at openspec/changes/add-caching/spec.md against the approved terms in termbase.csv and tell me where the wording drifts</th>
+                <th class="positive-col">we have a termbase.csv from last month&#x27;s terminology audit sitting in docs/glossary/ — can you turn it into a vocabulary section for our AGENTS.md so the codegen agents stop inventing synonyms for things</th>
+                <th class="negative-col">translate the terms in our glossary.csv into French and German for the localization team, keep the definitions column as is</th>
+                <th class="negative-col">run eslint on src/ and fix the naming-convention warnings it reports</th>
+                <th class="negative-col">add a definitions section to the README that explains what extend mode and merge policy mean for new contributors</th>
+                <th class="negative-col">audit our engineering docs for inconsistent terminology and build me a termbase and a report on which variants dominate</th>
+                <th class="negative-col">summarize the terminology-audit report in examples/sample-reports/planets into three bullet points for a slide</th>
+                <th class="negative-col">terms.csv has duplicate rows with slightly different ids — dedupe it and merge the definition columns into one clean spreadsheet</th>
+                <th class="test-col positive-col">we just merged the scheduler implementation, scan the new code in src/scheduler for recurring domain terms that aren&#x27;t in our termbase yet and propose candidates for the next revision</th>
+                <th class="test-col positive-col">vocab drift check on my tasks file pls, termbase is in the repo root</th>
+                <th class="test-col negative-col">rename the variable extendMode to inheritMode across the whole codebase and update the tests</th>
+                <th class="test-col positive-col">someone on the team keeps writing &#x27;execution&#x27; instead of &#x27;run&#x27; in our proposals. we have a canonical terms csv from an audit. can you lint the proposals/ dir for that kind of thing and suggest fixes</th>
+                <th class="test-col negative-col">proofread my spec.md for grammar, spelling and passive voice before I send it for review</th>
+                <th class="test-col positive-col">before I cut tasks from this spec can you verify it only uses approved terminology? the term list is at data/terms.csv</th>
+                <th class="test-col negative-col">write an openspec proposal and spec for the new caching layer, following the conventions in openspec/README.md</th>
+                <th class="test-col negative-col">show me a stem and leaf diagram of which terms dominate across our wiki and where they conflict</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="best-row">
+                <td>1</td>
+                <td><span class="score score-ok">21/36</span></td>
+                <td><span class="score score-ok">13/24</span></td>
+                <td class="description">Turn a termbase.csv controlled vocabulary into an enforceable naming contract for spec-driven development. Use this whenever the user mentions a termbase, glossary, canonical terms, naming consistency, vocabulary drift, term linting, AGENTS.md vocabulary sections, or wants specs/proposals/generated code checked against approved terminology — even if they don&#x27;t say &#x27;vocabulary contract&#x27;. Also use when the user asks to render a glossary into agent context or to find new candidate terms after an implementation.</td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">1/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+            </tr>
+            <tr class="">
+                <td>2</td>
+                <td><span class="score score-ok">20/36</span></td>
+                <td><span class="score score-ok">14/24</span></td>
+                <td class="description">Use this skill when a controlled-vocabulary CSV (termbase.csv, glossary csv, approved/preferred terms list — often the output of a terminology audit) already exists and the user wants to put it to work downstream: (1) render it into agent or reviewer context — an AGENTS.md/CLAUDE.md vocabulary section or a compact preamble block for a spec/proposal — so writers and codegen agents stop inventing synonyms; (2) check or lint a draft spec, proposal, or tasks file against the approved terms and report wording drift, banned variants, or flip-flopping between synonyms; (3) after an implementation or refactor, find recurring new domain terms not yet in the termbase and report candidates with counts and locations (read-only; never edits the termbase). Trigger for any request to enforce, apply, or make specs/agents &quot;actually follow&quot; an existing term list. Do NOT use to create a termbase or audit docs to build a glossary from scratch — that&#x27;s terminology-audit; this skill consumes the finished CSV.</td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">1/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">1/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+            </tr>
+            <tr class="">
+                <td>3</td>
+                <td><span class="score score-ok">20/36</span></td>
+                <td><span class="score score-ok">13/24</span></td>
+                <td class="description">Use this skill for ANY task whose input is an existing controlled-vocabulary CSV — termbase.csv, glossary.csv, an approved/preferred term list, or the output of a terminology audit. Even if the task looks doable by hand, invoke this skill whenever the user wants to: (a) make agents or writers actually follow the term list — e.g. generate an AGENTS.md/CLAUDE.md vocabulary section or a compact preamble block for a spec/proposal; (b) check or lint a spec, proposal, or tasks file against the approved terms — wording drift, banned variants, synonym flip-flopping; or (c) scan code or docs after an implementation/refactor for recurring new domain terms missing from the termbase, reporting candidates with counts and locations without editing the CSV. Rule of thumb: a term list already exists and must be applied, enforced, rendered, or checked → this skill. The only exclusion: no termbase exists yet and one must be built from docs — that is terminology-audit, not this.</td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">1/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+            </tr>
+            <tr class="">
+                <td>4</td>
+                <td><span class="score score-ok">19/36</span></td>
+                <td><span class="score score-ok">13/24</span></td>
+                <td class="description">Use when a termbase or glossary CSV ALREADY EXISTS and must be applied downstream — not built from scratch (building one is terminology-audit; consuming its output is THIS skill). Trigger on: turning termbase.csv / glossary.csv / terminology-audit output into something agents or writers will actually follow — an AGENTS.md or CLAUDE.md vocabulary section, or a paste-able preamble for a spec/proposal (&quot;make Claude follow the term list&quot;, &quot;stop agents inventing synonyms&quot;); checking or linting a draft spec, proposal, or tasks file against approved terms (&quot;where does the wording drift&quot;, &quot;enforce the termbase on specs/*.md&quot;, synonym flip-flopping); or scanning code/docs after an implementation/refactor for recurring new domain terms missing from the termbase, reporting candidates with counts and locations without editing the CSV. Any request where an existing approved/preferred/forbidden term list must be enforced, rendered, applied, or checked → this skill.</td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">1/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+</body>
+</html>
