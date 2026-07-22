@@ -1,0 +1,34 @@
+{
+  "skill_name": "terminology-audit",
+  "note": "Fixtures are examples/sample-dataset/ (NASA planet pages) at the repo root — three short public-domain docs with planted terminology patterns: a real conflict (moon/Moon/satellite), a legitimate-narrowing pair (rover/orbiter/spacecraft/mission), an undecided toss-up presented as interchangeable in the source (Orion Arm/Orion Spur), and a genuine defined-term change over time (Pluto's 2006 reclassification, dwarf planet vs planet) that should NOT be flagged as inconsistency. A worked golden report and termbase already exist at examples/sample-reports/planets/ for comparison, but were produced by a prior run — treat them as a reference, not a byte-for-byte target, since this is a judgment task.",
+  "evals": [
+    {
+      "id": 0,
+      "eval_name": "planets-full-audit",
+      "prompt": "Audit the terminology used across examples/sample-dataset/dwarf-planets.md, mars.md, and solar-system-overview.md. I want a termbase and a written audit report.",
+      "expected_output": "termbase.csv with the 8 required columns (term_id, preferred_term, part_of_speech, definition, usage_context, forbidden_variants, status, source_locations) and terminology-audit-report.md with Summary / Inconsistencies found / Items needing stakeholder input / Recommendations sections. The moon/Moon/satellite overload should be caught as a real conflict; Pluto's dwarf-planet reclassification should NOT be flagged as an inconsistency (it's a legitimate definitional change, both terms are correct depending on era/context); rover vs orbiter vs spacecraft should be recognized as meaningfully distinct, not flattened into one preferred term.",
+      "files": ["examples/sample-dataset/dwarf-planets.md", "examples/sample-dataset/mars.md", "examples/sample-dataset/solar-system-overview.md"],
+      "assertions": [
+        "termbase.csv has a header row with exactly the 8 documented columns, in any order",
+        "termbase.csv has at least one row per document with quoting applied to fields containing commas",
+        "The moon / Moon / satellite ambiguity is identified as a real inconsistency (not silently merged or ignored)",
+        "Pluto being called both 'planet' (historically) and 'dwarf planet' (post-2006) is NOT flagged as a terminology conflict — the report should recognize this as a legitimate definitional change, not drift",
+        "rover / orbiter / spacecraft are treated as a meaningfully distinct set (not forced into one preferred term), while 'mission' standing in for the vehicle itself is flagged as the actual looseness",
+        "terminology-audit-report.md contains all four required sections: Summary, Inconsistencies found, Items needing stakeholder input, Recommendations",
+        "The report states which single source is most internally consistent"
+      ]
+    },
+    {
+      "id": 1,
+      "eval_name": "termbase-only-request",
+      "prompt": "I just want the termbase CSV from examples/sample-dataset/mars.md and examples/sample-dataset/dwarf-planets.md — skip the written report for now.",
+      "expected_output": "Only termbase.csv delivered (the skill still does the full Step 1-3 analysis internally per its own instructions, but only renders/delivers the termbase since that's what was asked for). No terminology-audit-report.md produced or mentioned as a required deliverable.",
+      "files": ["examples/sample-dataset/mars.md", "examples/sample-dataset/dwarf-planets.md"],
+      "assertions": [
+        "termbase.csv is produced with the documented columns",
+        "No terminology-audit-report.md file is generated (the user asked for termbase only)",
+        "The Red Planet / Mars nickname pattern is treated as an accepted stylistic variant, not flagged as inconsistent usage"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "vocabulary-contract",
+  "version": "1.0.0",
+  "description": "Turn a termbase.csv controlled vocabulary (from a terminology audit or hand-maintained) into an enforceable naming contract for spec-driven development: render it into AGENTS.md/CLAUDE.md agent context, enforce it against draft specs and proposals, and surface new candidate terms after an implementation.",
+  "author": {
+    "name": "JoyceMarieStack"
+  }
+}

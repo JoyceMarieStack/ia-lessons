@@ -1,1 +1,8 @@
 .DS_Store
+
+# Skill eval run outputs and packaging artifacts — regenerate with the
+# skill-creator eval loop / package_skill.py rather than committing them.
+plugins/*/evals/runs/
+plugins/*/evals/**/description-opt.log
+plugins/*/evals/**/description-opt-report.html
+*.skill

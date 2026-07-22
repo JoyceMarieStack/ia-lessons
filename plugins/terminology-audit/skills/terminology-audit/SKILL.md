@@ -5,6 +5,11 @@ description: Audit technical/engineering docs for inconsistent terminology, then
 
 # Terminology Audit
 
+For human-facing docs (READMEs, API references, guides, wikis). If the input
+is instead a spec-driven-development spec file (spec-kit, OpenSpec,
+Given/When/Then, MUST/SHALL requirements), use the `sdd-terminology-audit`
+skill in this plugin instead — the two run independently and don't chain.
+
 Audits a set of technical/engineering documents, finds places where multiple
 terms are used for the same underlying concept (or the same term is used
 inconsistently), and produces two deliverables:
