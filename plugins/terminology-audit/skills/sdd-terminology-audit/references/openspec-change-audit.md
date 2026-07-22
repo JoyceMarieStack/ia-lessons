@@ -220,4 +220,6 @@ name was defined, the problem is not terminology — omit it.
   and tasks inherit them"), since that tells the writer which single
   file most needs the fix.
 - The Summary's file list groups files by artifact type so a reader can
-  see at a glance which parts of the chain were in scope.
+  see at a glance which parts of the chain were in scope, and gains one
+  extra count line: number of `?` findings (`AMB-GHOST`, a name nothing
+  establishes).

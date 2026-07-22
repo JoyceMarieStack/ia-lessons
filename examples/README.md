@@ -104,6 +104,27 @@ expression"). The outputs — report with the Ambiguity Alerts block,
 `termbase.csv`, and `ambiguity-alerts.csv` — are in
 `sample-reports/job-scheduler/`.
 
+### Worked example: the dark-mode change folder (multi-artifact)
+
+`sample-sdd-dataset/openspec-dark-mode/` is a full OpenSpec layout — a
+base spec plus a change folder (`proposal.md`, `design.md`, a delta
+spec, `tasks.md`) — with one problem planted per artifact:
+
+- the proposal **coins** "theme preference" for what the base spec calls
+  "appearance setting" (drift at birth, inherited by every downstream
+  artifact — the alert anchors at the proposal, not where the echo is
+  noticed);
+- the delta's MODIFIED header rewords the base requirement's title,
+  which OpenSpec's exact-header matching silently turns into a duplicate
+  at archive time;
+- the design introduces `DisplayModeStore` with no stated bridge to the
+  spec concept (while `ThemeToggle`, whose bridge *is* stated, correctly
+  goes unflagged);
+- a task references "the preference bridge," which nothing upstream
+  establishes — the `AMB-GHOST` case.
+
+Outputs are in `sample-reports/openspec-dark-mode/`.
+
 ### The honest limitation, worth stating plainly
 
 A terminology audit catches vocabulary ambiguity — it will never catch a spec that's internally logically inconsistent while using perfectly consistent words (e.g., a precondition that contradicts a postcondition two sections later, both phrased with impeccably consistent terminology). That's a different failure mode than SDD's other named risks (spec drift over time, non-determinism, the code-vs-spec-as-source-of-truth debate), which sit outside what a terminology tool can see. Worth being upfront about that scope when pitching this to a team — it's one piece of spec quality, not spec review in full.
