@@ -34,3 +34,1207 @@ Proposed (18.9s): Use this skill when a controlled-vocabulary CSV (termbase.csv,
 Iteration 2/4
 Description: Use this skill when a controlled-vocabulary CSV (termbase.csv, glossary csv, approved/preferred terms list — often the output of a terminology audit) already exists and the user wants to put it to work downstream: (1) render it into agent or reviewer context — an AGENTS.md/CLAUDE.md vocabulary section or a compact preamble block for a spec/proposal — so writers and codegen agents stop inventing synonyms; (2) check or lint a draft spec, proposal, or tasks file against the approved terms and report wording drift, banned variants, or flip-flopping between synonyms; (3) after an implementation or refactor, find recurring new domain terms not yet in the termbase and report candidates with counts and locations (read-only; never edits the termbase). Trigger for any request to enforce, apply, or make specs/agents "actually follow" an existing term list. Do NOT use to create a termbase or audit docs to build a glossary from scratch — that's terminology-audit; this skill consumes the finished CSV.
 ============================================================
+Train: 20/36 correct, precision=100% recall=11% accuracy=56% (78.2s)
+  [FAIL] rate=0/3 expected=True: what new domain terms did the payments refactor introduce th
+  [FAIL] rate=1/3 expected=True: take the terminology audit output (termbase.csv, columns pre
+  [FAIL] rate=0/3 expected=True: our specs keep flip flopping between extend mode, extension 
+  [FAIL] rate=0/3 expected=True: render our glossary csv into a compact preamble block i can 
+  [FAIL] rate=0/3 expected=True: we have a termbase.csv from last month's terminology audit s
+  [FAIL] rate=1/3 expected=True: check my draft spec at openspec/changes/add-caching/spec.md 
+  [PASS] rate=0/3 expected=False: translate the terms in our glossary.csv into French and Germ
+  [PASS] rate=0/3 expected=False: run eslint on src/ and fix the naming-convention warnings it
+  [PASS] rate=0/3 expected=False: audit our engineering docs for inconsistent terminology and 
+  [PASS] rate=0/3 expected=False: add a definitions section to the README that explains what e
+  [PASS] rate=0/3 expected=False: terms.csv has duplicate rows with slightly different ids — d
+  [PASS] rate=0/3 expected=False: summarize the terminology-audit report in examples/sample-re
+Test : 14/24 correct, precision=100% recall=17% accuracy=58% (0.0s)
+  [FAIL] rate=1/3 expected=True: vocab drift check on my tasks file pls, termbase is in the r
+  [FAIL] rate=0/3 expected=True: we just merged the scheduler implementation, scan the new co
+  [FAIL] rate=0/3 expected=True: someone on the team keeps writing 'execution' instead of 'ru
+  [PASS] rate=0/3 expected=False: rename the variable extendMode to inheritMode across the who
+  [FAIL] rate=1/3 expected=True: before I cut tasks from this spec can you verify it only use
+  [PASS] rate=0/3 expected=False: write an openspec proposal and spec for the new caching laye
+  [PASS] rate=0/3 expected=False: proofread my spec.md for grammar, spelling and passive voice
+  [PASS] rate=0/3 expected=False: show me a stem and leaf diagram of which terms dominate acro
+
+Improving description...
+Proposed (25.5s): Use this skill for ANY task whose input is an existing controlled-vocabulary CSV — termbase.csv, glossary.csv, an approved/preferred term list, or the output of a terminology audit. Even if the task looks doable by hand, invoke this skill whenever the user wants to: (a) make agents or writers actually follow the term list — e.g. generate an AGENTS.md/CLAUDE.md vocabulary section or a compact preamble block for a spec/proposal; (b) check or lint a spec, proposal, or tasks file against the approved terms — wording drift, banned variants, synonym flip-flopping; or (c) scan code or docs after an implementation/refactor for recurring new domain terms missing from the termbase, reporting candidates with counts and locations without editing the CSV. Rule of thumb: a term list already exists and must be applied, enforced, rendered, or checked → this skill. The only exclusion: no termbase exists yet and one must be built from docs — that is terminology-audit, not this.
+
+============================================================
+Iteration 3/4
+Description: Use this skill for ANY task whose input is an existing controlled-vocabulary CSV — termbase.csv, glossary.csv, an approved/preferred term list, or the output of a terminology audit. Even if the task looks doable by hand, invoke this skill whenever the user wants to: (a) make agents or writers actually follow the term list — e.g. generate an AGENTS.md/CLAUDE.md vocabulary section or a compact preamble block for a spec/proposal; (b) check or lint a spec, proposal, or tasks file against the approved terms — wording drift, banned variants, synonym flip-flopping; or (c) scan code or docs after an implementation/refactor for recurring new domain terms missing from the termbase, reporting candidates with counts and locations without editing the CSV. Rule of thumb: a term list already exists and must be applied, enforced, rendered, or checked → this skill. The only exclusion: no termbase exists yet and one must be built from docs — that is terminology-audit, not this.
+============================================================
+Train: 20/36 correct, precision=100% recall=11% accuracy=56% (75.8s)
+  [FAIL] rate=1/3 expected=True: what new domain terms did the payments refactor introduce th
+  [FAIL] rate=0/3 expected=True: take the terminology audit output (termbase.csv, columns pre
+  [FAIL] rate=0/3 expected=True: our specs keep flip flopping between extend mode, extension 
+  [FAIL] rate=1/3 expected=True: render our glossary csv into a compact preamble block i can 
+  [FAIL] rate=0/3 expected=True: we have a termbase.csv from last month's terminology audit s
+  [PASS] rate=0/3 expected=False: translate the terms in our glossary.csv into French and Germ
+  [FAIL] rate=0/3 expected=True: check my draft spec at openspec/changes/add-caching/spec.md 
+  [PASS] rate=0/3 expected=False: add a definitions section to the README that explains what e
+  [PASS] rate=0/3 expected=False: run eslint on src/ and fix the naming-convention warnings it
+  [PASS] rate=0/3 expected=False: audit our engineering docs for inconsistent terminology and 
+  [PASS] rate=0/3 expected=False: terms.csv has duplicate rows with slightly different ids — d
+  [PASS] rate=0/3 expected=False: summarize the terminology-audit report in examples/sample-re
+Test : 13/24 correct, precision=100% recall=8% accuracy=54% (0.0s)
+  [FAIL] rate=1/3 expected=True: vocab drift check on my tasks file pls, termbase is in the r
+  [FAIL] rate=0/3 expected=True: we just merged the scheduler implementation, scan the new co
+  [FAIL] rate=0/3 expected=True: someone on the team keeps writing 'execution' instead of 'ru
+  [FAIL] rate=0/3 expected=True: before I cut tasks from this spec can you verify it only use
+  [PASS] rate=0/3 expected=False: rename the variable extendMode to inheritMode across the who
+  [PASS] rate=0/3 expected=False: proofread my spec.md for grammar, spelling and passive voice
+  [PASS] rate=0/3 expected=False: show me a stem and leaf diagram of which terms dominate acro
+  [PASS] rate=0/3 expected=False: write an openspec proposal and spec for the new caching laye
+
+Improving description...
+Proposed (38.2s): Use when a termbase or glossary CSV ALREADY EXISTS and must be applied downstream — not built from scratch (building one is terminology-audit; consuming its output is THIS skill). Trigger on: turning termbase.csv / glossary.csv / terminology-audit output into something agents or writers will actually follow — an AGENTS.md or CLAUDE.md vocabulary section, or a paste-able preamble for a spec/proposal ("make Claude follow the term list", "stop agents inventing synonyms"); checking or linting a draft spec, proposal, or tasks file against approved terms ("where does the wording drift", "enforce the termbase on specs/*.md", synonym flip-flopping); or scanning code/docs after an implementation/refactor for recurring new domain terms missing from the termbase, reporting candidates with counts and locations without editing the CSV. Any request where an existing approved/preferred/forbidden term list must be enforced, rendered, applied, or checked → this skill.
+
+============================================================
+Iteration 4/4
+Description: Use when a termbase or glossary CSV ALREADY EXISTS and must be applied downstream — not built from scratch (building one is terminology-audit; consuming its output is THIS skill). Trigger on: turning termbase.csv / glossary.csv / terminology-audit output into something agents or writers will actually follow — an AGENTS.md or CLAUDE.md vocabulary section, or a paste-able preamble for a spec/proposal ("make Claude follow the term list", "stop agents inventing synonyms"); checking or linting a draft spec, proposal, or tasks file against approved terms ("where does the wording drift", "enforce the termbase on specs/*.md", synonym flip-flopping); or scanning code/docs after an implementation/refactor for recurring new domain terms missing from the termbase, reporting candidates with counts and locations without editing the CSV. Any request where an existing approved/preferred/forbidden term list must be enforced, rendered, applied, or checked → this skill.
+============================================================
+Train: 19/36 correct, precision=100% recall=6% accuracy=53% (73.9s)
+  [FAIL] rate=1/3 expected=True: our specs keep flip flopping between extend mode, extension 
+  [FAIL] rate=0/3 expected=True: take the terminology audit output (termbase.csv, columns pre
+  [FAIL] rate=0/3 expected=True: what new domain terms did the payments refactor introduce th
+  [FAIL] rate=0/3 expected=True: render our glossary csv into a compact preamble block i can 
+  [FAIL] rate=0/3 expected=True: check my draft spec at openspec/changes/add-caching/spec.md 
+  [FAIL] rate=0/3 expected=True: we have a termbase.csv from last month's terminology audit s
+  [PASS] rate=0/3 expected=False: translate the terms in our glossary.csv into French and Germ
+  [PASS] rate=0/3 expected=False: run eslint on src/ and fix the naming-convention warnings it
+  [PASS] rate=0/3 expected=False: audit our engineering docs for inconsistent terminology and 
+  [PASS] rate=0/3 expected=False: add a definitions section to the README that explains what e
+  [PASS] rate=0/3 expected=False: summarize the terminology-audit report in examples/sample-re
+  [PASS] rate=0/3 expected=False: terms.csv has duplicate rows with slightly different ids — d
+Test : 13/24 correct, precision=100% recall=8% accuracy=54% (0.0s)
+  [FAIL] rate=0/3 expected=True: vocab drift check on my tasks file pls, termbase is in the r
+  [FAIL] rate=1/3 expected=True: we just merged the scheduler implementation, scan the new co
+  [FAIL] rate=0/3 expected=True: someone on the team keeps writing 'execution' instead of 'ru
+  [PASS] rate=0/3 expected=False: rename the variable extendMode to inheritMode across the who
+  [FAIL] rate=0/3 expected=True: before I cut tasks from this spec can you verify it only use
+  [PASS] rate=0/3 expected=False: proofread my spec.md for grammar, spelling and passive voice
+  [PASS] rate=0/3 expected=False: show me a stem and leaf diagram of which terms dominate acro
+  [PASS] rate=0/3 expected=False: write an openspec proposal and spec for the new caching laye
+
+Max iterations reached (4).
+
+Exit reason: max_iterations (4)
+Best score: 4/8 (iteration 1)
+{
+  "exit_reason": "max_iterations (4)",
+  "original_description": "Turn a termbase.csv controlled vocabulary into an enforceable naming contract for spec-driven development. Use this whenever the user mentions a termbase, glossary, canonical terms, naming consistency, vocabulary drift, term linting, AGENTS.md vocabulary sections, or wants specs/proposals/generated code checked against approved terminology \u2014 even if they don't say 'vocabulary contract'. Also use when the user asks to render a glossary into agent context or to find new candidate terms after an implementation.",
+  "best_description": "Turn a termbase.csv controlled vocabulary into an enforceable naming contract for spec-driven development. Use this whenever the user mentions a termbase, glossary, canonical terms, naming consistency, vocabulary drift, term linting, AGENTS.md vocabulary sections, or wants specs/proposals/generated code checked against approved terminology \u2014 even if they don't say 'vocabulary contract'. Also use when the user asks to render a glossary into agent context or to find new candidate terms after an implementation.",
+  "best_score": "4/8",
+  "best_train_score": "6/12",
+  "best_test_score": "4/8",
+  "final_description": "Use when a termbase or glossary CSV ALREADY EXISTS and must be applied downstream \u2014 not built from scratch (building one is terminology-audit; consuming its output is THIS skill). Trigger on: turning termbase.csv / glossary.csv / terminology-audit output into something agents or writers will actually follow \u2014 an AGENTS.md or CLAUDE.md vocabulary section, or a paste-able preamble for a spec/proposal (\"make Claude follow the term list\", \"stop agents inventing synonyms\"); checking or linting a draft spec, proposal, or tasks file against approved terms (\"where does the wording drift\", \"enforce the termbase on specs/*.md\", synonym flip-flopping); or scanning code/docs after an implementation/refactor for recurring new domain terms missing from the termbase, reporting candidates with counts and locations without editing the CSV. Any request where an existing approved/preferred/forbidden term list must be enforced, rendered, applied, or checked \u2192 this skill.",
+  "iterations_run": 4,
+  "holdout": 0.4,
+  "train_size": 12,
+  "test_size": 8,
+  "history": [
+    {
+      "iteration": 1,
+      "description": "Turn a termbase.csv controlled vocabulary into an enforceable naming contract for spec-driven development. Use this whenever the user mentions a termbase, glossary, canonical terms, naming consistency, vocabulary drift, term linting, AGENTS.md vocabulary sections, or wants specs/proposals/generated code checked against approved terminology \u2014 even if they don't say 'vocabulary contract'. Also use when the user asks to render a glossary into agent context or to find new candidate terms after an implementation.",
+      "train_passed": 6,
+      "train_failed": 6,
+      "train_total": 12,
+      "train_results": [
+        {
+          "query": "what new domain terms did the payments refactor introduce that aren't in termbase.csv? give me counts and example locations, don't touch the termbase itself",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "take the terminology audit output (termbase.csv, columns preferred_term / forbidden_variants) and make it into something claude will actually follow when it drafts tasks.md files",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "our specs keep flip flopping between extend mode, extension mode and inherit mode for the same feature. we already have a termbase with the approved term \u2014 enforce it on specs/*.md",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "render our glossary csv into a compact preamble block i can paste at the top of proposal.md so reviewers see the binding vocabulary",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "check my draft spec at openspec/changes/add-caching/spec.md against the approved terms in termbase.csv and tell me where the wording drifts",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we have a termbase.csv from last month's terminology audit sitting in docs/glossary/ \u2014 can you turn it into a vocabulary section for our AGENTS.md so the codegen agents stop inventing synonyms for things",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "translate the terms in our glossary.csv into French and German for the localization team, keep the definitions column as is",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "run eslint on src/ and fix the naming-convention warnings it reports",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "add a definitions section to the README that explains what extend mode and merge policy mean for new contributors",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "audit our engineering docs for inconsistent terminology and build me a termbase and a report on which variants dominate",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "summarize the terminology-audit report in examples/sample-reports/planets into three bullet points for a slide",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "terms.csv has duplicate rows with slightly different ids \u2014 dedupe it and merge the definition columns into one clean spreadsheet",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "test_passed": 4,
+      "test_failed": 4,
+      "test_total": 8,
+      "test_results": [
+        {
+          "query": "we just merged the scheduler implementation, scan the new code in src/scheduler for recurring domain terms that aren't in our termbase yet and propose candidates for the next revision",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "vocab drift check on my tasks file pls, termbase is in the repo root",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "rename the variable extendMode to inheritMode across the whole codebase and update the tests",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "someone on the team keeps writing 'execution' instead of 'run' in our proposals. we have a canonical terms csv from an audit. can you lint the proposals/ dir for that kind of thing and suggest fixes",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "proofread my spec.md for grammar, spelling and passive voice before I send it for review",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "before I cut tasks from this spec can you verify it only uses approved terminology? the term list is at data/terms.csv",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "write an openspec proposal and spec for the new caching layer, following the conventions in openspec/README.md",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "show me a stem and leaf diagram of which terms dominate across our wiki and where they conflict",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "passed": 6,
+      "failed": 6,
+      "total": 12,
+      "results": [
+        {
+          "query": "what new domain terms did the payments refactor introduce that aren't in termbase.csv? give me counts and example locations, don't touch the termbase itself",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "take the terminology audit output (termbase.csv, columns preferred_term / forbidden_variants) and make it into something claude will actually follow when it drafts tasks.md files",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "our specs keep flip flopping between extend mode, extension mode and inherit mode for the same feature. we already have a termbase with the approved term \u2014 enforce it on specs/*.md",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "render our glossary csv into a compact preamble block i can paste at the top of proposal.md so reviewers see the binding vocabulary",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "check my draft spec at openspec/changes/add-caching/spec.md against the approved terms in termbase.csv and tell me where the wording drifts",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we have a termbase.csv from last month's terminology audit sitting in docs/glossary/ \u2014 can you turn it into a vocabulary section for our AGENTS.md so the codegen agents stop inventing synonyms for things",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "translate the terms in our glossary.csv into French and German for the localization team, keep the definitions column as is",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "run eslint on src/ and fix the naming-convention warnings it reports",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "add a definitions section to the README that explains what extend mode and merge policy mean for new contributors",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "audit our engineering docs for inconsistent terminology and build me a termbase and a report on which variants dominate",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "summarize the terminology-audit report in examples/sample-reports/planets into three bullet points for a slide",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "terms.csv has duplicate rows with slightly different ids \u2014 dedupe it and merge the definition columns into one clean spreadsheet",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "iteration": 2,
+      "description": "Use this skill when a controlled-vocabulary CSV (termbase.csv, glossary csv, approved/preferred terms list \u2014 often the output of a terminology audit) already exists and the user wants to put it to work downstream: (1) render it into agent or reviewer context \u2014 an AGENTS.md/CLAUDE.md vocabulary section or a compact preamble block for a spec/proposal \u2014 so writers and codegen agents stop inventing synonyms; (2) check or lint a draft spec, proposal, or tasks file against the approved terms and report wording drift, banned variants, or flip-flopping between synonyms; (3) after an implementation or refactor, find recurring new domain terms not yet in the termbase and report candidates with counts and locations (read-only; never edits the termbase). Trigger for any request to enforce, apply, or make specs/agents \"actually follow\" an existing term list. Do NOT use to create a termbase or audit docs to build a glossary from scratch \u2014 that's terminology-audit; this skill consumes the finished CSV.",
+      "train_passed": 6,
+      "train_failed": 6,
+      "train_total": 12,
+      "train_results": [
+        {
+          "query": "what new domain terms did the payments refactor introduce that aren't in termbase.csv? give me counts and example locations, don't touch the termbase itself",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "take the terminology audit output (termbase.csv, columns preferred_term / forbidden_variants) and make it into something claude will actually follow when it drafts tasks.md files",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "our specs keep flip flopping between extend mode, extension mode and inherit mode for the same feature. we already have a termbase with the approved term \u2014 enforce it on specs/*.md",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "render our glossary csv into a compact preamble block i can paste at the top of proposal.md so reviewers see the binding vocabulary",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we have a termbase.csv from last month's terminology audit sitting in docs/glossary/ \u2014 can you turn it into a vocabulary section for our AGENTS.md so the codegen agents stop inventing synonyms for things",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "check my draft spec at openspec/changes/add-caching/spec.md against the approved terms in termbase.csv and tell me where the wording drifts",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "translate the terms in our glossary.csv into French and German for the localization team, keep the definitions column as is",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "run eslint on src/ and fix the naming-convention warnings it reports",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "audit our engineering docs for inconsistent terminology and build me a termbase and a report on which variants dominate",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "add a definitions section to the README that explains what extend mode and merge policy mean for new contributors",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "terms.csv has duplicate rows with slightly different ids \u2014 dedupe it and merge the definition columns into one clean spreadsheet",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "summarize the terminology-audit report in examples/sample-reports/planets into three bullet points for a slide",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "test_passed": 4,
+      "test_failed": 4,
+      "test_total": 8,
+      "test_results": [
+        {
+          "query": "vocab drift check on my tasks file pls, termbase is in the repo root",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we just merged the scheduler implementation, scan the new code in src/scheduler for recurring domain terms that aren't in our termbase yet and propose candidates for the next revision",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "someone on the team keeps writing 'execution' instead of 'run' in our proposals. we have a canonical terms csv from an audit. can you lint the proposals/ dir for that kind of thing and suggest fixes",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "rename the variable extendMode to inheritMode across the whole codebase and update the tests",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "before I cut tasks from this spec can you verify it only uses approved terminology? the term list is at data/terms.csv",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "write an openspec proposal and spec for the new caching layer, following the conventions in openspec/README.md",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "proofread my spec.md for grammar, spelling and passive voice before I send it for review",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "show me a stem and leaf diagram of which terms dominate across our wiki and where they conflict",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "passed": 6,
+      "failed": 6,
+      "total": 12,
+      "results": [
+        {
+          "query": "what new domain terms did the payments refactor introduce that aren't in termbase.csv? give me counts and example locations, don't touch the termbase itself",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "take the terminology audit output (termbase.csv, columns preferred_term / forbidden_variants) and make it into something claude will actually follow when it drafts tasks.md files",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "our specs keep flip flopping between extend mode, extension mode and inherit mode for the same feature. we already have a termbase with the approved term \u2014 enforce it on specs/*.md",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "render our glossary csv into a compact preamble block i can paste at the top of proposal.md so reviewers see the binding vocabulary",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we have a termbase.csv from last month's terminology audit sitting in docs/glossary/ \u2014 can you turn it into a vocabulary section for our AGENTS.md so the codegen agents stop inventing synonyms for things",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "check my draft spec at openspec/changes/add-caching/spec.md against the approved terms in termbase.csv and tell me where the wording drifts",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "translate the terms in our glossary.csv into French and German for the localization team, keep the definitions column as is",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "run eslint on src/ and fix the naming-convention warnings it reports",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "audit our engineering docs for inconsistent terminology and build me a termbase and a report on which variants dominate",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "add a definitions section to the README that explains what extend mode and merge policy mean for new contributors",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "terms.csv has duplicate rows with slightly different ids \u2014 dedupe it and merge the definition columns into one clean spreadsheet",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "summarize the terminology-audit report in examples/sample-reports/planets into three bullet points for a slide",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "iteration": 3,
+      "description": "Use this skill for ANY task whose input is an existing controlled-vocabulary CSV \u2014 termbase.csv, glossary.csv, an approved/preferred term list, or the output of a terminology audit. Even if the task looks doable by hand, invoke this skill whenever the user wants to: (a) make agents or writers actually follow the term list \u2014 e.g. generate an AGENTS.md/CLAUDE.md vocabulary section or a compact preamble block for a spec/proposal; (b) check or lint a spec, proposal, or tasks file against the approved terms \u2014 wording drift, banned variants, synonym flip-flopping; or (c) scan code or docs after an implementation/refactor for recurring new domain terms missing from the termbase, reporting candidates with counts and locations without editing the CSV. Rule of thumb: a term list already exists and must be applied, enforced, rendered, or checked \u2192 this skill. The only exclusion: no termbase exists yet and one must be built from docs \u2014 that is terminology-audit, not this.",
+      "train_passed": 6,
+      "train_failed": 6,
+      "train_total": 12,
+      "train_results": [
+        {
+          "query": "what new domain terms did the payments refactor introduce that aren't in termbase.csv? give me counts and example locations, don't touch the termbase itself",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "take the terminology audit output (termbase.csv, columns preferred_term / forbidden_variants) and make it into something claude will actually follow when it drafts tasks.md files",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "our specs keep flip flopping between extend mode, extension mode and inherit mode for the same feature. we already have a termbase with the approved term \u2014 enforce it on specs/*.md",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "render our glossary csv into a compact preamble block i can paste at the top of proposal.md so reviewers see the binding vocabulary",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we have a termbase.csv from last month's terminology audit sitting in docs/glossary/ \u2014 can you turn it into a vocabulary section for our AGENTS.md so the codegen agents stop inventing synonyms for things",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "translate the terms in our glossary.csv into French and German for the localization team, keep the definitions column as is",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "check my draft spec at openspec/changes/add-caching/spec.md against the approved terms in termbase.csv and tell me where the wording drifts",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "add a definitions section to the README that explains what extend mode and merge policy mean for new contributors",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "run eslint on src/ and fix the naming-convention warnings it reports",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "audit our engineering docs for inconsistent terminology and build me a termbase and a report on which variants dominate",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "terms.csv has duplicate rows with slightly different ids \u2014 dedupe it and merge the definition columns into one clean spreadsheet",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "summarize the terminology-audit report in examples/sample-reports/planets into three bullet points for a slide",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "test_passed": 4,
+      "test_failed": 4,
+      "test_total": 8,
+      "test_results": [
+        {
+          "query": "vocab drift check on my tasks file pls, termbase is in the repo root",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we just merged the scheduler implementation, scan the new code in src/scheduler for recurring domain terms that aren't in our termbase yet and propose candidates for the next revision",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "someone on the team keeps writing 'execution' instead of 'run' in our proposals. we have a canonical terms csv from an audit. can you lint the proposals/ dir for that kind of thing and suggest fixes",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "before I cut tasks from this spec can you verify it only uses approved terminology? the term list is at data/terms.csv",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "rename the variable extendMode to inheritMode across the whole codebase and update the tests",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "proofread my spec.md for grammar, spelling and passive voice before I send it for review",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "show me a stem and leaf diagram of which terms dominate across our wiki and where they conflict",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "write an openspec proposal and spec for the new caching layer, following the conventions in openspec/README.md",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "passed": 6,
+      "failed": 6,
+      "total": 12,
+      "results": [
+        {
+          "query": "what new domain terms did the payments refactor introduce that aren't in termbase.csv? give me counts and example locations, don't touch the termbase itself",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "take the terminology audit output (termbase.csv, columns preferred_term / forbidden_variants) and make it into something claude will actually follow when it drafts tasks.md files",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "our specs keep flip flopping between extend mode, extension mode and inherit mode for the same feature. we already have a termbase with the approved term \u2014 enforce it on specs/*.md",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "render our glossary csv into a compact preamble block i can paste at the top of proposal.md so reviewers see the binding vocabulary",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we have a termbase.csv from last month's terminology audit sitting in docs/glossary/ \u2014 can you turn it into a vocabulary section for our AGENTS.md so the codegen agents stop inventing synonyms for things",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "translate the terms in our glossary.csv into French and German for the localization team, keep the definitions column as is",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "check my draft spec at openspec/changes/add-caching/spec.md against the approved terms in termbase.csv and tell me where the wording drifts",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "add a definitions section to the README that explains what extend mode and merge policy mean for new contributors",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "run eslint on src/ and fix the naming-convention warnings it reports",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "audit our engineering docs for inconsistent terminology and build me a termbase and a report on which variants dominate",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "terms.csv has duplicate rows with slightly different ids \u2014 dedupe it and merge the definition columns into one clean spreadsheet",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "summarize the terminology-audit report in examples/sample-reports/planets into three bullet points for a slide",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "iteration": 4,
+      "description": "Use when a termbase or glossary CSV ALREADY EXISTS and must be applied downstream \u2014 not built from scratch (building one is terminology-audit; consuming its output is THIS skill). Trigger on: turning termbase.csv / glossary.csv / terminology-audit output into something agents or writers will actually follow \u2014 an AGENTS.md or CLAUDE.md vocabulary section, or a paste-able preamble for a spec/proposal (\"make Claude follow the term list\", \"stop agents inventing synonyms\"); checking or linting a draft spec, proposal, or tasks file against approved terms (\"where does the wording drift\", \"enforce the termbase on specs/*.md\", synonym flip-flopping); or scanning code/docs after an implementation/refactor for recurring new domain terms missing from the termbase, reporting candidates with counts and locations without editing the CSV. Any request where an existing approved/preferred/forbidden term list must be enforced, rendered, applied, or checked \u2192 this skill.",
+      "train_passed": 6,
+      "train_failed": 6,
+      "train_total": 12,
+      "train_results": [
+        {
+          "query": "our specs keep flip flopping between extend mode, extension mode and inherit mode for the same feature. we already have a termbase with the approved term \u2014 enforce it on specs/*.md",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "take the terminology audit output (termbase.csv, columns preferred_term / forbidden_variants) and make it into something claude will actually follow when it drafts tasks.md files",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "what new domain terms did the payments refactor introduce that aren't in termbase.csv? give me counts and example locations, don't touch the termbase itself",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "render our glossary csv into a compact preamble block i can paste at the top of proposal.md so reviewers see the binding vocabulary",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "check my draft spec at openspec/changes/add-caching/spec.md against the approved terms in termbase.csv and tell me where the wording drifts",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we have a termbase.csv from last month's terminology audit sitting in docs/glossary/ \u2014 can you turn it into a vocabulary section for our AGENTS.md so the codegen agents stop inventing synonyms for things",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "translate the terms in our glossary.csv into French and German for the localization team, keep the definitions column as is",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "run eslint on src/ and fix the naming-convention warnings it reports",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "audit our engineering docs for inconsistent terminology and build me a termbase and a report on which variants dominate",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "add a definitions section to the README that explains what extend mode and merge policy mean for new contributors",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "summarize the terminology-audit report in examples/sample-reports/planets into three bullet points for a slide",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "terms.csv has duplicate rows with slightly different ids \u2014 dedupe it and merge the definition columns into one clean spreadsheet",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "test_passed": 4,
+      "test_failed": 4,
+      "test_total": 8,
+      "test_results": [
+        {
+          "query": "vocab drift check on my tasks file pls, termbase is in the repo root",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we just merged the scheduler implementation, scan the new code in src/scheduler for recurring domain terms that aren't in our termbase yet and propose candidates for the next revision",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "someone on the team keeps writing 'execution' instead of 'run' in our proposals. we have a canonical terms csv from an audit. can you lint the proposals/ dir for that kind of thing and suggest fixes",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "rename the variable extendMode to inheritMode across the whole codebase and update the tests",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "before I cut tasks from this spec can you verify it only uses approved terminology? the term list is at data/terms.csv",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "proofread my spec.md for grammar, spelling and passive voice before I send it for review",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "show me a stem and leaf diagram of which terms dominate across our wiki and where they conflict",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "write an openspec proposal and spec for the new caching layer, following the conventions in openspec/README.md",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "passed": 6,
+      "failed": 6,
+      "total": 12,
+      "results": [
+        {
+          "query": "our specs keep flip flopping between extend mode, extension mode and inherit mode for the same feature. we already have a termbase with the approved term \u2014 enforce it on specs/*.md",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "take the terminology audit output (termbase.csv, columns preferred_term / forbidden_variants) and make it into something claude will actually follow when it drafts tasks.md files",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "what new domain terms did the payments refactor introduce that aren't in termbase.csv? give me counts and example locations, don't touch the termbase itself",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "render our glossary csv into a compact preamble block i can paste at the top of proposal.md so reviewers see the binding vocabulary",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "check my draft spec at openspec/changes/add-caching/spec.md against the approved terms in termbase.csv and tell me where the wording drifts",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "we have a termbase.csv from last month's terminology audit sitting in docs/glossary/ \u2014 can you turn it into a vocabulary section for our AGENTS.md so the codegen agents stop inventing synonyms for things",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "translate the terms in our glossary.csv into French and German for the localization team, keep the definitions column as is",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "run eslint on src/ and fix the naming-convention warnings it reports",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "audit our engineering docs for inconsistent terminology and build me a termbase and a report on which variants dominate",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "add a definitions section to the README that explains what extend mode and merge policy mean for new contributors",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "summarize the terminology-audit report in examples/sample-reports/planets into three bullet points for a slide",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "terms.csv has duplicate rows with slightly different ids \u2014 dedupe it and merge the definition columns into one clean spreadsheet",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ]
+    }
+  ]
+}
+
+Report: /tmp/skill_description_report_vocabulary-contract_20260722_072225.html
