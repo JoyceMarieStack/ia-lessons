@@ -26,7 +26,12 @@ termbase + a written audit report:
    Alerts** block (location, quoted fragment, and the exact decision
    needed); the termbase; and a machine-readable `ambiguity-alerts.csv`
    that a pre-commit hook, CI step, or agent harness can surface to the
-   spec writer.
+   spec writer. Given a whole OpenSpec change folder (proposal.md,
+   design.md, delta specs, tasks.md), it audits the artifact chain:
+   drift between artifacts, MODIFIED-requirement headers that silently
+   miss their base-spec match, unbridged design renames, and task names
+   nothing upstream establishes (`AMB-GHOST`) — see
+   `skills/sdd-terminology-audit/references/openspec-change-audit.md`.
 
 No bundled scripts or tooling in either skill — every deliverable is
 written directly by the agent, so both run the same regardless of which

@@ -1,6 +1,6 @@
 {
   "name": "terminology-audit",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Audit technical/engineering docs or spec-driven-development (SDD) spec files for inconsistent terminology and produce a termbase, a written audit report, and (for SDD specs) lint-style ambiguity alerts that notify spec writers of the exact sentence to clarify.",
   "author": {
     "name": "JoyceMarieStack"
