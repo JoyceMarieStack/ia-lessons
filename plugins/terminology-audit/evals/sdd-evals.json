@@ -1,17 +1,17 @@
 {
   "skill_name": "sdd-terminology-audit",
-  "note": "Fixture is examples/sample-sdd-dataset/job-scheduler-spec.md at the repo root. A golden report and ambiguity-alerts.csv already exist at examples/sample-reports/job-scheduler/ with three known findings: task/job (AMB-SYN), TTL referent in FR-006 (AMB-SCENT), and schedule referent in FR-003 (AMB-POLY). Use those as the reference for what a correct run should catch, not a byte-for-byte target.",
+  "note": "Fixture is examples/sample-sdd-dataset/job-scheduler-spec.md at the repo root. A golden report and ambiguity-alerts.csv already exist at examples/sample-reports/job-scheduler/ with three known findings: task/job (AMB-SYN), TTL referent in FR-006 (AMB-SCENT), and schedule referent in FR-003 (AMB-POLY). Use those as a reference for the KIND of ambiguity a correct run should catch, not a fixed checklist: this spec has more than three genuine ambiguities in it (e.g. task/job, an unresolved create/register/submit verb triple, and the FR-006 referent gap are all independently gate-passing), so two correct runs can reasonably surface a different subset. Grade the shape (schema, internal consistency, no false positives on the documented traps) and that the task/job conflict specifically is always caught — not an exact 3-item checklist match.",
   "evals": [
     {
       "id": 0,
       "eval_name": "job-scheduler-known-findings",
       "prompt": "Run a terminology ambiguity audit on examples/sample-sdd-dataset/job-scheduler-spec.md before I hand it to a coding agent. I want the ambiguity alerts, the termbase, and the CSV.",
-      "expected_output": "terminology-audit-report.md led by an Ambiguity Alerts block, termbase.csv (7 columns, no status column), and ambiguity-alerts.csv (10 columns). Should catch the same three findings as the existing golden report: task vs job (AMB-SYN, object facet), TTL referent ambiguity in FR-006 (AMB-SCENT, value facet), and schedule referent ambiguity in FR-003 (AMB-POLY, field facet). Every alert cites a real anchor (FR-00N or ASN) and a quoted fragment.",
+      "expected_output": "terminology-audit-report.md led by an Ambiguity Alerts block, termbase.csv (7 columns, no status column), and ambiguity-alerts.csv (10 columns). Must always catch task vs job (AMB-SYN, object facet) — the corpus's clearest, highest-consequence conflict. May additionally catch any subset of: TTL/entries referent ambiguity in FR-006 (AMB-SCENT), schedule referent ambiguity in FR-003 (AMB-POLY), or the create/register/submit verb triple (AMB-SYN) — all four are independently gate-passing findings in this spec. Every alert cites a real anchor (FR-00N or ASN) and a quoted fragment; the documented false-positive traps (cancel vs kill, job vs run) are never flagged.",
       "files": ["examples/sample-sdd-dataset/job-scheduler-spec.md"],
       "assertions": [
-        "The task/job synonym conflict is caught and classified AMB-SYN",
-        "The TTL referent ambiguity in FR-006 is caught and classified AMB-SCENT",
-        "The schedule referent ambiguity in FR-003 is caught and classified AMB-POLY",
+        "The task/job synonym conflict is always caught and classified AMB-SYN — this is the one finding that must appear in every run",
+        "Any additional findings beyond task/job are drawn from the known gate-passing set (FR-006 referent ambiguity, FR-003 schedule ambiguity, create/register/submit verb triple) or are independently defensible against the mandatory finding gate — not padding",
+        "The cancel/kill and job/run false-synonym traps are never flagged",
         "ambiguity-alerts.csv has exactly these 10 columns: alert_id, rule, facet, file, anchor, quoted_text, meaning_a, meaning_b, supported_wording, decision_needed",
         "termbase.csv does NOT have a status column (unresolved concepts are omitted from the termbase entirely, not marked with a status)",
         "Every code (AMB-SYN / AMB-POLY / AMB-SCENT) printed in the report is paired with its plain-language name",
