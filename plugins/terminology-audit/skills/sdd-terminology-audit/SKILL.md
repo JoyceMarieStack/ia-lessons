@@ -32,11 +32,17 @@ architecture. The foundational distinction: **a concept and the word used
 for it are not the same thing.** Every finding is one of three ways that
 mapping breaks in a spec.
 
-| Rule | IA name | Symbol | What broke |
-| --- | --- | --- | --- |
-| `AMB-SYN` | Synonym conflict (synonymy) | `✕` | Different words, one concept. The audited sources use competing terms for the same implementation concept, so a generated codebase can grow two names — or two entities — for one thing. |
-| `AMB-POLY` | Homograph collision (polysemy) | `△` | One word, different concepts. A single wording has two evidence-supported meanings, so the agent must guess which one a given sentence intends. |
-| `AMB-SCENT` | Scent failure | `△` | A subtype of polysemy: an abbreviation or unexpanded term of art appears in normative text, and the audited scope supports two different expansions or referents. The reader arriving at that sentence has no trail to follow. |
+| Rule | Plain name | IA name | Symbol | What broke |
+| --- | --- | --- | --- | --- |
+| `AMB-SYN` | Two words for one thing | Synonym conflict (synonymy) | `✕` | The audited sources use competing terms for the same implementation concept, so a generated codebase can grow two names — or two entities — for one thing. |
+| `AMB-POLY` | One word, two meanings | Homograph collision (polysemy) | `△` | A single wording has two evidence-supported meanings, so the agent must guess which one a given sentence intends. |
+| `AMB-SCENT` | Shorthand with two possible referents | Scent failure | `△` | A subtype of polysemy: an abbreviation or unexpanded term of art appears in normative text, and the audited scope supports two different expansions or referents. The reader arriving at that sentence has no trail to follow. |
+
+The codes exist for machines — grep, CI annotations,
+`ambiguity-alerts.csv`. The plain names exist for developers. Never
+print a bare code in the report: pair every code with its plain name, as
+in `AMB-POLY (one word, two meanings)`, so a reader who has never seen
+this skill can act on a finding without consulting a legend.
 
 Why the distinction matters: the two main failures need opposite fixes.
 A synonym conflict is fixed by **picking one preferred term** and demoting
@@ -266,18 +272,29 @@ The notification block. One alert per passed finding, most consequential
 first, in this format:
 
 ```
-✕ AMB-SYN (object) spec.md › FR-001 / AS1 — "job" vs "task": both name the schedulable unit. Decide: one term for the entity, its endpoints, and its queue records.
+✕ "task" vs "job" — two words for one thing (AMB-SYN)
+  spec.md › AS1 — "submits a task, Then the task appears in the job queue"
+  AS1 and Edge Cases say "task"; all seven FRs say "job" — both name the schedulable unit.
+  Decide: confirm "job" and replace "task" in AS1 and Edge Cases, or define "task" as a distinct concept.
 ```
 
-Pattern: symbol, rule, facet in parentheses, file `›` anchor, the quoted
-fragment or competing pair, one clause stating the two meanings or terms,
-then `Decide:` followed by the exact question to answer. Keep each alert
-to one or two lines — a writer should be able to triage the whole block
-before deciding whether to read further.
+The first line is the triage line: symbol, the disputed wording in
+quotes (for `AMB-SYN`, the competing pair), then the plain rule name
+with the code in parentheses. Lead with the wording, not the code — the
+first thing a developer scans for is *which word* is the problem. Follow
+with the location (file `›` anchor) and quoted fragment, one sentence
+stating the two meanings or competing terms, and a `Decide:` line with
+the exact question to answer. Four short lines maximum per alert — the
+block must be triageable without reading the rest of the report.
 
-Close the block with a facet rollup line (e.g., `Facet rollup: object 1 ·
-state 2 · value 1.`) and, only when one facet dominates, one sentence
-naming the cluster.
+Do not put a facet on the alert lines. A bare facet in parentheses reads
+as if it named the ambiguous word; facets belong in the findings table,
+`ambiguity-alerts.csv`, and the closing rollup.
+
+Close the block with a rollup written in plain words that names its
+facets in parentheses — e.g., `Both findings are names for files and
+documents (facet: artifact).` — and, only when one facet dominates, one
+sentence naming the cluster.
 
 If nothing passed the gate, write `No ambiguity alerts.` and nothing else
 in this section.
@@ -288,8 +305,8 @@ State only:
 
 - files audited;
 - authority sources inspected;
-- number of `✕` findings;
-- number of `△` findings;
+- number of `✕` findings (`AMB-SYN`, two words for one thing);
+- number of `△` findings (`AMB-POLY` / `AMB-SCENT`, one word or shorthand with two meanings);
 - number of unresolved terminology decisions.
 
 Do not make readiness, safety, completeness, approval, severity, or
@@ -382,6 +399,8 @@ Before delivery, remove any finding that fails even one check:
 Then check the deliverables agree:
 
 - Every passed finding appears exactly once in the Ambiguity Alerts block and exactly once in `ambiguity-alerts.csv`, and the counts match the Summary.
+- Every alert's first line leads with the disputed wording itself, not a code or a facet.
+- Every rule code printed in the report is paired with its plain name; no bare codes anywhere.
 - Every alert's anchor exists in the audited file.
 - Every `Decide:` clause is a question a stakeholder can answer by editing the spec.
 

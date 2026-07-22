@@ -3,21 +3,32 @@
 ## 1. Ambiguity Alerts
 
 ```
-✕ AMB-SYN (object) job-scheduler-spec.md › AS1 — "task" vs "job": both name the schedulable unit ("submits a task, the task appears in the job queue" vs. FR-001 "create a job"). Decide: confirm "job" (the term all seven FRs use) and replace "task" in AS1 and Edge Cases, or define "task" as a distinct concept.
+✕ "task" vs "job" — two words for one thing (AMB-SYN)
+  job-scheduler-spec.md › AS1 — "submits a task, Then the task appears in the job queue"
+  AS1 and Edge Cases say "task"; FR-001–FR-007, AS2, and AS3 say "job" — both name the schedulable unit.
+  Decide: confirm "job" (the term every FR uses) and replace "task" in AS1 and Edge Cases, or define "task" as a distinct concept.
 
-△ AMB-SCENT (value) job-scheduler-spec.md › FR-006 — "purge all entries whose TTL has expired": cache TTL (FR-004) or lease TTL (FR-005)? Decide: which entries the cleanup worker purges — expired cached results, expired leases, or both — and name the TTL explicitly.
+△ "TTL" — shorthand with two possible referents (AMB-SCENT)
+  job-scheduler-spec.md › FR-006 — "purge all entries whose TTL has expired"
+  The spec defines two time-to-lives — the result cache TTL (FR-004) and the lease TTL (FR-005) — and FR-006 names neither.
+  Decide: which entries does the cleanup worker purge — expired cached results, expired leases, or both? Name the TTL explicitly.
 
-△ AMB-POLY (field) job-scheduler-spec.md › FR-003 — "display the schedule for each job": the recurrence rule (cron expression, FR-001) or the list of upcoming runs (Success Criteria "next ten runs")? Decide: what the dashboard schedule shows.
+△ "schedule" — one word, two meanings (AMB-POLY)
+  job-scheduler-spec.md › FR-003 — "display the schedule for each job"
+  Sometimes the recurrence rule (the job's cron expression, FR-001), sometimes the list of upcoming runs ("next ten runs"; "empty schedule").
+  Decide: does the dashboard show the cron expression, the upcoming-run list, or both as separately named fields?
 ```
 
-Facet rollup: object 1 · value 1 · field 1.
+The findings touch three different kinds of names — an entity ("job",
+facet: object), a stored value ("TTL", facet: value), and a dashboard
+field ("schedule", facet: field) — no single cluster.
 
 ## 2. Summary
 
 - Files audited: 1 (`examples/sample-sdd-dataset/job-scheduler-spec.md`)
 - Authority sources inspected: none beyond the audited specification (no implementation, schema, or documented product vocabulary was in scope)
-- `✕` findings: 1
-- `△` findings: 2
+- `✕` findings (`AMB-SYN`, two words for one thing): 1
+- `△` findings (`AMB-POLY` / `AMB-SCENT`, one word or shorthand with two meanings): 2
 - Unresolved terminology decisions: 2
 
 ## 3. Evidence Table
@@ -83,7 +94,7 @@ Facet rollup: object 1 · value 1 · field 1.
 
 ## 6. Settled Classification Table
 
-Symbols: `●` supported and unambiguous · `○` benign variation · `△` one wording, two meanings (`AMB-POLY`/`AMB-SCENT`) · `✕` competing terms, one concept (`AMB-SYN`). Spec position: `behavioral` = normative or executable text · `contextual` = supporting prose.
+Symbols: `●` supported and unambiguous · `○` benign variation · `△` one word or shorthand with two meanings (`AMB-POLY`/`AMB-SCENT`) · `✕` two words for one thing (`AMB-SYN`). Spec position: `behavioral` = normative or executable text · `contextual` = supporting prose.
 
 | Concept | Wording found | Judgment | Spec position | Wording to use |
 | --- | --- | --- | --- | --- |
