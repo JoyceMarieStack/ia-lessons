@@ -151,6 +151,11 @@ Eval run outputs, the description-optimization log/report, and packaged
 3. **Enforce** those decisions in every new spec, and **round-trip** newly
    coined terms back into the termbase (`vocabulary-contract`).
 
+See [`images/`](images/) for diagrams of this: the full artifact-flow
+dependency graph, two worked use cases (docs → glossary, spec-driven
+development loop), and why `markdown-ia`'s three skills are a recommended
+sequence rather than a dependency chain.
+
 ## License
 
 [MIT](LICENSE).
