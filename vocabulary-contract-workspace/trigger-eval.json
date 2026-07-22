@@ -1,0 +1,22 @@
+[
+  {"query": "we have a termbase.csv from last month's terminology audit sitting in docs/glossary/ — can you turn it into a vocabulary section for our AGENTS.md so the codegen agents stop inventing synonyms for things", "should_trigger": true},
+  {"query": "check my draft spec at openspec/changes/add-caching/spec.md against the approved terms in termbase.csv and tell me where the wording drifts", "should_trigger": true},
+  {"query": "someone on the team keeps writing 'execution' instead of 'run' in our proposals. we have a canonical terms csv from an audit. can you lint the proposals/ dir for that kind of thing and suggest fixes", "should_trigger": true},
+  {"query": "we just merged the scheduler implementation, scan the new code in src/scheduler for recurring domain terms that aren't in our termbase yet and propose candidates for the next revision", "should_trigger": true},
+  {"query": "render our glossary csv into a compact preamble block i can paste at the top of proposal.md so reviewers see the binding vocabulary", "should_trigger": true},
+  {"query": "our specs keep flip flopping between extend mode, extension mode and inherit mode for the same feature. we already have a termbase with the approved term — enforce it on specs/*.md", "should_trigger": true},
+  {"query": "take the terminology audit output (termbase.csv, columns preferred_term / forbidden_variants) and make it into something claude will actually follow when it drafts tasks.md files", "should_trigger": true},
+  {"query": "vocab drift check on my tasks file pls, termbase is in the repo root", "should_trigger": true},
+  {"query": "before I cut tasks from this spec can you verify it only uses approved terminology? the term list is at data/terms.csv", "should_trigger": true},
+  {"query": "what new domain terms did the payments refactor introduce that aren't in termbase.csv? give me counts and example locations, don't touch the termbase itself", "should_trigger": true},
+  {"query": "audit our engineering docs for inconsistent terminology and build me a termbase and a report on which variants dominate", "should_trigger": false},
+  {"query": "translate the terms in our glossary.csv into French and German for the localization team, keep the definitions column as is", "should_trigger": false},
+  {"query": "write an openspec proposal and spec for the new caching layer, following the conventions in openspec/README.md", "should_trigger": false},
+  {"query": "rename the variable extendMode to inheritMode across the whole codebase and update the tests", "should_trigger": false},
+  {"query": "show me a stem and leaf diagram of which terms dominate across our wiki and where they conflict", "should_trigger": false},
+  {"query": "proofread my spec.md for grammar, spelling and passive voice before I send it for review", "should_trigger": false},
+  {"query": "terms.csv has duplicate rows with slightly different ids — dedupe it and merge the definition columns into one clean spreadsheet", "should_trigger": false},
+  {"query": "add a definitions section to the README that explains what extend mode and merge policy mean for new contributors", "should_trigger": false},
+  {"query": "run eslint on src/ and fix the naming-convention warnings it reports", "should_trigger": false},
+  {"query": "summarize the terminology-audit report in examples/sample-reports/planets into three bullet points for a slide", "should_trigger": false}
+]
