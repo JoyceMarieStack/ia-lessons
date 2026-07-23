@@ -10,11 +10,6 @@
       "description": "Two independent skills for auditing terminology: terminology-audit for human-facing technical/engineering docs (produces a termbase + audit report), and sdd-terminology-audit for spec-driven-development spec files (produces lint-style ambiguity alerts plus a termbase). Pick the skill that matches your input — they don't chain."
     },
     {
-      "name": "markdown-ia",
-      "source": "./plugins/markdown-ia",
-      "description": "Information-architecture analysis for Markdown documentation corpora: corpus discovery (file counts, structure, freshness, gaps), content-model inference (document types, schemas, metadata rules), and vocabulary/taxonomy governance (terminology and tagging consistency)."
-    },
-    {
       "name": "vocabulary-contract",
       "source": "./plugins/vocabulary-contract",
       "description": "Turn a termbase.csv controlled vocabulary into an enforceable naming contract for spec-driven development: render it into AGENTS.md/CLAUDE.md agent context, enforce it against draft specs and proposals, and surface new candidate terms after an implementation."

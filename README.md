@@ -12,15 +12,9 @@ haven't actually looked at.
 
 ```
 ia-lessons/
-├── .claude-plugin/marketplace.json   # marketplace manifest (three plugins)
+├── .claude-plugin/marketplace.json   # marketplace manifest (two plugins)
 ├── LICENSE
 ├── plugins/
-│   ├── markdown-ia/                  # IA analysis for Markdown corpora
-│   │   ├── skills/
-│   │   │   ├── markdown-docs-corpus-discovery/
-│   │   │   ├── markdown-content-model-discovery/
-│   │   │   └── markdown-vocabulary-governance/
-│   │   └── evals/                    # eval prompts for all three skills (self-scan fixture)
 │   ├── terminology-audit/            # terminology auditing → termbase
 │   │   ├── skills/
 │   │   │   ├── terminology-audit/          # for human-facing docs
@@ -35,26 +29,31 @@ ia-lessons/
 
 Each plugin's own README has the detail; this file is the map.
 
+## Adding a plugin
+
+Every `plugins/<name>/` directory needs a matching entry in
+`.claude-plugin/marketplace.json` — that's what makes it installable via
+`/plugin install`. It's easy to build out a plugin's `skills/`, `evals/`,
+and `plugin.json` and forget the marketplace entry, so after adding one,
+verify nothing's missing:
+
+```bash
+comm -23 \
+  <(ls plugins | sort) \
+  <(jq -r '.plugins[].name' .claude-plugin/marketplace.json | sort)
+```
+
+Empty output means every plugin directory has a marketplace entry. Any
+name it prints is a plugin that exists on disk but isn't registered yet.
+
 ## Plugins
 
-### markdown-ia
-
-Information-architecture analysis for Markdown documentation corpora. Three
-skills, answering three questions:
-
-- **Corpus discovery** — how much content exists, what shape it is in, and
-  whether it is maintained or abandoned.
-- **Content model discovery** — a content model is what IA people mean by
-  "organization systems" made concrete: what types of docs exist, what
-  structure each type follows, what metadata each carries.
-- **Vocabulary governance** — two IA concerns at once: labeling (are we
-  calling the same thing by the same name — ApplicationSet vs Application
-  Set?) and organization via facets/taxonomy (is there a controlled way to
-  classify content — tags, categories — or is folder placement the only
-  signal?).
-
-Together these answer: what exists, what shape it has, and what words and
-categories are already in use to describe it.
+**markdown-ia** (information-architecture analysis for Markdown
+documentation corpora — corpus discovery, content-model discovery,
+vocabulary governance) moved to its own repo, `markdown-ia-skills`, since
+it has no dependency on the terminology-audit → vocabulary-contract
+pipeline the other two plugins here form together. Install it from that
+repo directly rather than from `ia-lessons`.
 
 ### terminology-audit
 
@@ -100,12 +99,13 @@ evals run against:
   overloaded "schedule" field). Used by `sdd-terminology-audit`'s evals.
 - `examples/sample-reports/` — worked outputs from real runs: termbases and
   audit reports for the planets, job-scheduler, and timezone-utility corpora,
-  ambiguity alerts for the job-scheduler spec, and corpus-discovery /
-  content-model / vocabulary-governance reports for Argo CD's docs. These
-  double as golden references for the evals above and as show-don't-tell
-  examples for anyone deciding whether to install a skill. (The
-  timezone-utility report predates the current report format and is kept for
-  history — see `plugins/terminology-audit/README.md`.)
+  and ambiguity alerts for the job-scheduler spec. These double as golden
+  references for the evals above and as show-don't-tell examples for anyone
+  deciding whether to install a skill. (The timezone-utility report predates
+  the current report format and is kept for history — see
+  `plugins/terminology-audit/README.md`. The Argo CD corpus-discovery /
+  content-model / vocabulary-governance reports moved to `markdown-ia-skills`
+  along with the skills that produced them.)
 
 See `examples/README.md` for why these datasets make good test corpora and a
 concept-by-concept walkthrough of controlled vocabulary management.
@@ -130,25 +130,24 @@ The assertion style differs by how checkable each skill's output is:
   spec can have more genuine ambiguities than any one pass will surface, so
   those assertions check for internal consistency and the one
   always-must-catch finding, not an exact checklist.
-- **markdown-ia**'s three skills produce first-pass analysis, not checkable
-  data, so `plugins/markdown-ia/evals/evals.json` limits assertions to
-  structure (required sections present, in order, table-first formatting,
-  correct scope decisions) and leaves substance to a qualitative read — don't
-  force exact-content assertions onto a judgment task. Its fixture is this
-  repo itself: real git history, genuine document-type variety, and close to
-  no frontmatter tagging in use, which is itself a useful test — a good run
-  says so rather than inventing a taxonomy the corpus doesn't have.
+
+`markdown-ia`'s evals (structure-only assertions over first-pass analysis,
+self-scanning its own repo as fixture) now live in `markdown-ia-skills`,
+not here.
 
 Eval run outputs, the description-optimization log/report, and packaged
 `.skill` files are regenerated, not committed — see `.gitignore`.
 
 ## How the pieces fit
 
-1. **Discover** what exists and how it's organized (`markdown-ia`).
-2. **Audit** the words in use and settle on canonical terms — pick
+`markdown-ia` (now in its own repo) is a standalone reconnaissance tool —
+useful before or independent of the pipeline below, not a required first
+step in it:
+
+1. **Audit** the words in use and settle on canonical terms — pick
    `terminology-audit` for docs or `sdd-terminology-audit` for specs
    (`termbase.csv` either way).
-3. **Enforce** those decisions in every new spec, and **round-trip** newly
+2. **Enforce** those decisions in every new spec, and **round-trip** newly
    coined terms back into the termbase (`vocabulary-contract`).
 
 ## License
