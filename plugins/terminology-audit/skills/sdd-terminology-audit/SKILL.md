@@ -1,6 +1,6 @@
 ---
 name: sdd-terminology-audit
-description: Audit implementation-facing specifications and requirements for terminology ambiguity that could cause developers or coding agents to interpret the same concept differently, and notify spec writers with lint-style ambiguity alerts that point at the exact sentence to fix. Use for SDD specs (spec-kit, OpenSpec, or similar), requirement files, Given/When/Then scenarios, MUST/SHALL statements, schemas, interfaces, commands, states, events, errors, and field names — especially as a pre-flight check before a spec is handed to a coding agent for planning or generation. Produce an evidence-backed Markdown report led by an Ambiguity Alerts block, a CSV termbase, and a machine-readable ambiguity-alerts.csv. Do not use for general prose editing, completeness review, readiness assessment, or broad logical-consistency review.
+description: Audit implementation-facing specifications and requirements for terminology ambiguity that could cause developers or coding agents to interpret the same concept differently, and notify spec writers with lint-style ambiguity alerts that point at the exact sentence to fix. Use for SDD specs (spec-kit, OpenSpec, or similar), requirement files, Given/When/Then scenarios, MUST/SHALL statements, schemas, interfaces, commands, states, events, errors, and field names — especially as a pre-flight check before a spec is handed to a coding agent for planning or generation. Also use for whole OpenSpec change folders (proposal.md, design.md, delta specs with ADDED/MODIFIED/REMOVED requirements, tasks.md), where it additionally checks terminology drift across the artifact chain. Produce an evidence-backed Markdown report led by an Ambiguity Alerts block, a CSV termbase, and a machine-readable ambiguity-alerts.csv. Do not use for general prose editing, completeness review, readiness assessment, or broad logical-consistency review.
 ---
 
 # SDD Terminology Audit
@@ -80,6 +80,20 @@ diagnostic: when findings cluster in one facet (three of four findings are
 state names), the cluster — not the individual findings — is the real
 signal about where the spec needs a definitions pass.
 
+### Multi-artifact scopes (OpenSpec change folders)
+
+When the audit scope is an OpenSpec change folder
+(`openspec/changes/<id>/` — `proposal.md`, `design.md`, delta specs,
+`tasks.md`) or any chain of upstream/downstream artifacts for one
+change, read `references/openspec-change-audit.md` before extracting
+evidence. It adds the chain model (anchor each alert at the earliest
+artifact where the term enters), a replacement authority order,
+per-artifact priorities and traps, and a fourth rule that only exists in
+multi-artifact audits: `AMB-GHOST` (a name nothing establishes, symbol
+`?`) — for a task or design sentence that uses a name no upstream
+artifact or inspected source defines, so every implementation of that
+line is a guess.
+
 ## 2. Scope boundary
 
 A terminology finding exists only when wording can materially change an
@@ -144,7 +158,9 @@ evidence.
 
 ## 5. Mandatory finding gate
 
-Apply this gate before adding any `△` or `✕` finding.
+Apply this gate before adding any `△` or `✕` finding. (`?` findings, which
+have zero referents rather than two, use the adapted gate in
+`references/openspec-change-audit.md`.)
 
 A finding is allowed only when every answer below is **yes**:
 
@@ -213,6 +229,7 @@ Use:
 | `○` | — | Understandable variation that does not create a material implementation ambiguity |
 | `△` | `AMB-POLY` / `AMB-SCENT` | One wording has two evidence-supported meanings that could change implementation |
 | `✕` | `AMB-SYN` | Audited sources use incompatible terms for the same implementation concept |
+| `?` | `AMB-GHOST` | A name is used as if established, but no audited artifact or inspected source defines a referent (multi-artifact audits only — see `references/openspec-change-audit.md`) |
 
 Use `behavioral` for normative or executable specification text and
 `contextual` for supporting prose.
@@ -255,7 +272,7 @@ Use these columns:
 | Column | Meaning |
 | --- | --- |
 | `alert_id` | Stable lowercase slug |
-| `rule` | `AMB-SYN`, `AMB-POLY`, or `AMB-SCENT` |
+| `rule` | `AMB-SYN`, `AMB-POLY`, `AMB-SCENT`, or `AMB-GHOST` (multi-artifact audits only) |
 | `facet` | One facet from section 1 |
 | `file` | Spec file the sentence lives in |
 | `anchor` | Requirement ID, scenario ID, or heading nearest the sentence |

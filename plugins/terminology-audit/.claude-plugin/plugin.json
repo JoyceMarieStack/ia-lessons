@@ -1,7 +1,7 @@
 {
   "name": "terminology-audit",
-  "version": "2.3.0",
-  "description": "Two independent terminology-audit skills for different inputs: terminology-audit audits human-facing technical/engineering docs and produces a termbase plus a written audit report; sdd-terminology-audit audits spec-driven-development (SDD) spec files and produces lint-style ambiguity alerts (plus its own termbase) that notify spec writers of the exact sentence to clarify. Choose the skill matching your input — they run independently and are not meant to be chained.",
+  "version": "2.4.0",
+  "description": "Two independent terminology-audit skills for different inputs: terminology-audit audits human-facing technical/engineering docs and produces a termbase plus a written audit report; sdd-terminology-audit audits spec-driven-development (SDD) spec files — including whole OpenSpec change folders (proposal, design, delta specs, tasks) — and produces lint-style ambiguity alerts (plus its own termbase) that notify spec writers of the exact sentence to clarify. Choose the skill matching your input — they run independently and are not meant to be chained.",
   "author": {
     "name": "JoyceMarieStack"
   }
