@@ -39,11 +39,13 @@ agent or environment is running them.
 
 See each skill's `SKILL.md` for its full workflow, and
 [`../../examples`](../../examples) in this repo for worked examples
-(NASA solar-system docs + an Argo CD docs run for `terminology-audit`;
-the job-scheduler spec in `examples/sample-sdd-dataset/` with outputs in
-`examples/sample-reports/job-scheduler/` for `sdd-terminology-audit` —
-the earlier timezone-utility outputs predate the current report format
-and are kept for history).
+(NASA solar-system docs for `terminology-audit`; the job-scheduler spec
+in `examples/sample-sdd-dataset/` with outputs in
+`examples/sample-reports/job-scheduler/`, and the OpenSpec
+`add-dark-mode` change folder with outputs in
+`examples/sample-reports/openspec-dark-mode/`, for
+`sdd-terminology-audit` — the earlier timezone-utility outputs predate
+the current report format and are kept for history).
 
 ## Install
 
